@@ -303,7 +303,7 @@ case "$ADDITIONAL" in
         rm out/target/product/${COMMAND}/boot.img
         rm -rf out/target/product/${COMMAND}/ramdisk*
 
-        make out/target/product/${COMMAND}/boot.img
+        make -j${THREADS} out/target/product/${COMMAND}/boot.img
 		;;
 	*)
 		echo -e "${txtgrn}Building Android...${txtrst}"
