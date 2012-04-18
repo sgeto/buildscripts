@@ -234,59 +234,37 @@ case "$COMMAND" in
 		exit
 		;;
 	captivatemtd)
-		board=aries
 		lunch=cm_captivatemtd-userdebug
-		brunch=cm_captivatemtd-userdebug
-	;;
+	    ;;
 	fascinatemtd)
-		board=aries
 		lunch=cm_fascinatemtd-userdebug
-		brunch=cm_fascinatemtd-userdebug
 		;;
 	galaxys2)
-		board=smdk4210
 		lunch=cm_galaxys2-userdebug
-		brunch=cm_galaxys2-userdebug
 		;;
 	i777)
-		board=smdk4210
 		lunch=cm_i777-userdebug
-		brunch=cm_i777-userdebug
 		;;
 	i9100g)
-		board=t1
 		lunch=cm_i9100g-userdebug
-		brunch=cm_i9100g-userdebug
 		;;
 	galaxysl)
-		board=latona
 		lunch=cm_galaxysl-userdebug
-		brunch=cm_galaxysl-userdebug
 		;;
 	galaxynote)
-		board=smdk4210
 		lunch=cm_galaxynote-userdebug
-		brunch=cm_galaxynote-userdebug
 		;;
 	galaxysmtd)
-		board=aries
 		lunch=cm_galaxysmtd-userdebug
-		brunch=cm_galaxysmtd-userdebug
 		;;
 	galaxysbmtd)
-		board=aries
 		lunch=cm_galaxysbmtd-userdebug
-		brunch=cm_galaxysbmtd-userdebug
 		;;
 	maguro)
-		board=tuna
 		lunch=cm_maguro-userdebug
-		brunch=cm_maguro-userdebug
 		;;
 	vibrantmtd)
-	    board=aries
 	    lunch=cm_vibrantmtd-userdebug
-	    brunch=cm_vibrantmtd-userdebug
 	    ;;
 	*)
 		echo -e "${txtred}Usage: $0 DEVICE ADDITIONAL"
@@ -296,6 +274,8 @@ case "$COMMAND" in
 		exit 2
 		;;
 esac
+
+brunch=${lunch}
 
 # Check for Prebuilts
 		echo -e "${txtylw}Checking for Prebuilts...${txtrst}"
@@ -316,12 +296,14 @@ lunch ${lunch}
 # Start the Build
 case "$ADDITIONAL" in
 	kernel)
-		echo -e "${txtgrn}Building Kernel...${txtrst}"
-		cd kernel/samsung/${board}
-		./build.sh "$COMMAND"
-		cd ../../..
-		echo -e "${txtgrn}Building Android...${txtrst}"
-		brunch ${brunch}
+		echo -e "${txtgrn}Rebuilding bootimage...${txtrst}"
+
+        rm -rf out/target/product/${COMMAND}/obj/KERNEL_OBJ
+        rm out/target/product/${COMMAND}/kernel
+        rm out/target/product/${COMMAND}/boot.img
+        rm -rf out/target/product/${COMMAND}/ramdisk*
+
+        make out/target/product/${COMMAND}/boot.img
 		;;
 	*)
 		echo -e "${txtgrn}Building Android...${txtrst}"
