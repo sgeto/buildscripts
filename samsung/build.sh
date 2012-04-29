@@ -2,10 +2,32 @@
 
 COMMAND="$1"
 ADDITIONAL="$2"
+TOP=${PWD}
+
+# Common defines (Arch-dependent)
+case `uname -s` in
+	Darwin)
+		txtrst='\033[0m'  # Color off
+		txtred='\033[0;31m' # Red
+		txtgrn='\033[0;32m' # Green
+		txtylw='\033[0;33m' # Yellow
+		txtblu='\033[0;34m' # Blue
+		THREADS=`sysctl -an hw.logicalcpu`
+		;;
+	*)
+		txtrst='\e[0m'  # Color off
+		txtred='\e[0;31m' # Red
+		txtgrn='\e[0;32m' # Green
+		txtylw='\e[0;33m' # Yellow
+		txtblu='\e[0;34m' # Blue
+		THREADS=`cat /proc/cpuinfo | grep processor | wc -l`
+		;;
+esac
 
 check_root() {
     if [ ! $( id -u ) -eq 0 ]; then
-        echo "Please run this script as root."
+        echo -e "${txtred}Please run this script as root."
+        echo -e "\r\n ${txtrst}"
         exit
     fi
 }
@@ -37,7 +59,8 @@ install_ubuntu_packages()
         ;;
     *)
         # no arch
-        echo "No arch defined, aborting."
+        echo -e "${txtred}No arch defined, aborting."
+        echo -e "\r\n ${txtrst}"
         exit
         ;;
     esac
@@ -58,7 +81,8 @@ install_arch_packages()
         ;;
     *)
         # no arch
-        echo "No arch defined, aborting."
+        echo -e "${txtred}No arch defined, aborting."
+        echo -e "\r\n ${txtrst}"
         exit
         ;;
     esac
@@ -130,7 +154,8 @@ prepare_environment()
         
     *)
         # No distribution
-        echo "No distribution set. Aborting."
+        echo -e "${txtred}No distribution set. Aborting."
+        echo -e "\r\n ${txtrst}"
         exit
         ;;
     esac
@@ -158,7 +183,8 @@ prepare_environment()
                 ;;
             *)
                 # no branch
-                echo "No branch choosen. Aborting."
+                echo -e "${txtred}No branch choosen. Aborting."
+                echo -e "\r\n ${txtrst}"
                 exit
                 ;;
         esac
@@ -190,32 +216,93 @@ prepare_environment()
     esac
 }
 
-# Common defines (Arch-dependent)
-case `uname -s` in
-	Darwin)
-		txtrst='\033[0m'  # Color off
-		txtred='\033[0;31m' # Red
-		txtgrn='\033[0;32m' # Green
-		txtylw='\033[0;33m' # Yellow
-		txtblu='\033[0;34m' # Blue
-		THREADS=`sysctl -an hw.logicalcpu`
-		;;
-	*)
-		txtrst='\e[0m'  # Color off
-		txtred='\e[0;31m' # Red
-		txtgrn='\e[0;32m' # Green
-		txtylw='\e[0;33m' # Yellow
-		txtblu='\e[0;34m' # Blue
-		THREADS=`cat /proc/cpuinfo | grep processor | wc -l`
-		;;
-esac
+# create kernel zip after successfull build
+create_kernel_zip()
+{
+    if [ -e out/target/product/${COMMAND}/boot.img ]; then
 
-echo -e "${txtgrn}##########################################"
-echo -e "${txtgrn}#                                        #"
-echo -e "${txtgrn}#    TEAMHACKSUNG ANDROID BUILDSCRIPT    #"
-echo -e "${txtgrn}# visit us @ http://www.teamhacksung.org #"
-echo -e "${txtgrn}#                                        #"
-echo -e "${txtgrn}##########################################"
+        echo -e "${txtylw}Package KERNELUPDATE:${txtrst} out/target/product/${COMMAND}/kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip"
+
+        case ${COMMAND} in
+            galaxys2)
+                cd out/target/product/${COMMAND}
+
+                rm -rf kernel_zip
+                rm kernel-cm-9-*
+
+                mkdir -p kernel_zip/system/lib/modules
+                mkdir -p kernel_zip/META-INF/com/google/android
+
+                echo "Copying boot.img..."
+                cp boot.img kernel_zip/
+                echo "Copying kernel modules..."
+                cp -R system/lib/modules/* kernel_zip/system/lib/modules
+                echo "Copying update-binary..."
+                cp obj/EXECUTABLES/updater_intermediates/updater kernel_zip/META-INF/com/google/android/update-binary
+                echo "Copying updater-script..."
+                cat ${TOP}/buildscripts/samsung/${COMMAND}/kernel_updater-script > kernel_zip/META-INF/com/google/android/updater-script
+                
+                echo "Zipping package..."
+                cd kernel_zip
+                zip -qr ../kernel-cm-9-$(date +%Y%m%d)-${COMMAND}.zip ./
+                cd ${TOP}/out/target/product/${COMMAND}
+
+                echo "Signing package..."
+                java -jar ${TOP}/out/host/linux-x86/framework/signapk.jar ${TOP}/build/target/product/security/testkey.x509.pem ${TOP}/build/target/product/security/testkey.pk8 kernel-cm-9-$(date +%Y%m%d)-${COMMAND}.zip kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip
+                rm kernel-cm-9-$(date +%Y%m%d)-${COMMAND}.zip
+                echo -e "${txtgrn}Package complete:${txtrst} out/target/product/${COMMAND}/kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip"
+                md5sum kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip
+                cd ${TOP}
+                ;;
+            i777)
+                cd out/target/product/${COMMAND}
+
+                rm -rf kernel_zip
+                rm kernel-cm-9-*
+
+                mkdir -p kernel_zip/system/lib/modules
+                mkdir -p kernel_zip/META-INF/com/google/android
+
+                echo "Copying boot.img..."
+                cp boot.img kernel_zip/
+                echo "Copying kernel modules..."
+                cp -R system/lib/modules/* kernel_zip/system/lib/modules
+                echo "Copying update-binary..."
+                cp obj/EXECUTABLES/updater_intermediates/updater kernel_zip/META-INF/com/google/android/update-binary
+                echo "Copying updater-script..."
+                cat ${TOP}/buildscripts/samsung/${COMMAND}/kernel_updater-script > kernel_zip/META-INF/com/google/android/updater-script
+                
+                echo "Zipping package..."
+                cd kernel_zip
+                zip -qr ../kernel-cm-9-$(date +%Y%m%d)-${COMMAND}.zip ./
+                cd ${TOP}/out/target/product/${COMMAND}
+
+                echo "Signing package..."
+                java -jar ${TOP}/out/host/linux-x86/framework/signapk.jar ${TOP}/build/target/product/security/testkey.x509.pem ${TOP}/build/target/product/security/testkey.pk8 kernel-cm-9-$(date +%Y%m%d)-${COMMAND}.zip kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip
+                rm kernel-cm-9-$(date +%Y%m%d)-${COMMAND}.zip
+                echo -e "${txtgrn}Package complete:${txtrst} out/target/product/${COMMAND}/kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip"
+                md5sum kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip
+                cd ${TOP}
+                ;;
+            *)
+                echo -e "${txtred}No instructions to create out/target/product/${COMMAND}/kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip... skipping."
+                echo -e "\r\n ${txtrst}"
+                ;;
+        esac
+
+    fi
+}
+
+echo -e "${txtblu} ###################################################################################################"
+echo -e "${txtblu} \r\n"
+echo -e "${txtblu}   _______ _______ _______ _______ _     _ _______ _______ _     _ _______ _     _ __   _  ______  "
+echo -e "${txtblu}      |    |______ |_____| |  |  | |_____| |_____| |       |____/  |______ |     | | \  | |  ____  "
+echo -e "${txtblu}      |    |______ |     | |  |  | |     | |     | |_____  |    \_ ______| |_____| |  \_| |_____|  "
+echo -e "${txtblu} \r\n"
+echo -e "${txtblu}                                    CyanogenMod 9 buildscript"
+echo -e "${txtblu}                             visit us @ http://www.teamhacksung.org"
+echo -e "${txtblu} \r\n"
+echo -e "${txtblu} ###################################################################################################"
 echo -e "\r\n ${txtrst}"
 
 # Starting Timer
@@ -304,10 +391,12 @@ case "$ADDITIONAL" in
         rm -rf out/target/product/${COMMAND}/ramdisk*
 
         make -j${THREADS} out/target/product/${COMMAND}/boot.img
+        create_kernel_zip
 		;;
 	*)
 		echo -e "${txtgrn}Building Android...${txtrst}"
 		brunch ${brunch}
+        create_kernel_zip
 		;;
 esac
 
@@ -315,6 +404,6 @@ END=$(date +%s)
 ELAPSED=$((END - START))
 E_MIN=$((ELAPSED / 60))
 E_SEC=$((ELAPSED - E_MIN * 60))
-printf "Elapsed: "
+printf "${txtgrn}Elapsed: "
 [ $E_MIN != 0 ] && printf "%d min(s) " $E_MIN
-printf "%d sec(s)\n" $E_SEC
+printf "%d sec(s)\n ${txtrst}" $E_SEC
