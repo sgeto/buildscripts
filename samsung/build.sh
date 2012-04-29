@@ -380,6 +380,8 @@ echo -e "${txtgrn}Setting up Build Environment...${txtrst}"
 . build/envsetup.sh
 lunch ${lunch}
 
+export CROSS_COMPILE=${TOP}/prebuilt/linux-x86/toolchain/arm-eabi-4.4.3/bin/arm-eabi-
+
 # Start the Build
 case "$ADDITIONAL" in
 	kernel)
