@@ -393,6 +393,7 @@ case "$ADDITIONAL" in
         rm -rf out/target/product/${COMMAND}/ramdisk*
 
         make -j${THREADS} out/target/product/${COMMAND}/boot.img
+        make -j${THREADS} updater
         create_kernel_zip
 		;;
 	*)
