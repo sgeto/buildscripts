@@ -338,8 +338,8 @@ case "$COMMAND" in
 	galaxysl)
 		lunch=cm_galaxysl-userdebug
 		;;
-	galaxynote)
-		lunch=cm_galaxynote-userdebug
+	n7000)
+		lunch=cm_n7000-userdebug
 		;;
 	galaxysmtd)
 		lunch=cm_galaxysmtd-userdebug
