@@ -325,9 +325,12 @@ create_kernel_zip()
 
 echo -e "${txtblu} ###################################################################################################"
 echo -e "${txtblu} \r\n"
-echo -e "${txtblu}   _______ _______ _______ _______ _     _ _______ _______ _     _ _______ _     _ __   _  ______  "
-echo -e "${txtblu}      |    |______ |_____| |  |  | |_____| |_____| |       |____/  |______ |     | | \  | |  ____  "
-echo -e "${txtblu}      |    |______ |     | |  |  | |     | |     | |_____  |    \_ ______| |_____| |  \_| |_____|  "
+echo -e "${txtblu}        _______ ______          __  __ _    _          _____ _  __ _____ _    _ _   _  _____ "
+echo -e "${txtblu}       |__   __|  ____|   /\   |  \/  | |  | |   /\   / ____| |/ // ____| |  | | \ | |/ ____|"
+echo -e "${txtblu}          | |  | |__     /  \  | \  / | |__| |  /  \ | |    | ' /| (___ | |  | |  \| | |  __ "
+echo -e "${txtblu}          | |  |  __|   / /\ \ | |\/| |  __  | / /\ \| |    |  <  \___ \| |  | | . ` | | |_ |"
+echo -e "${txtblu}          | |  | |____ / ____ \| |  | | |  | |/ ____ \ |____| . \ ____) | |__| | |\  | |__| |"
+echo -e "${txtblu}          |_|  |______/_/    \_\_|  |_|_|  |_/_/    \_\_____|_|\_\_____/ \____/|_| \_|\_____|"
 echo -e "${txtblu} \r\n"
 echo -e "${txtblu}                                    CyanogenMod 9 buildscript"
 echo -e "${txtblu}                             visit us @ http://www.teamhacksung.org"
@@ -394,16 +397,11 @@ esac
 
 brunch=${lunch}
 
-# Check for Prebuilts
-		echo -e "${txtylw}Checking for Prebuilts...${txtrst}"
-if [ ! -e vendor/cm/proprietary/RomManager.apk ] || [ ! -e vendor/cm/proprietary/Term.apk ] || [ ! -e vendor/cm/proprietary/lib/armeabi/libjackpal-androidterm3.so ]; then
-		echo -e "${txtred}Prebuilts not found, downloading now...${txtrst}"
-		cd vendor/cm
-		./get-prebuilts
-		cd ../..
-else
-		echo -e "${txtgrn}Prebuilts found.${txtrst}"
-fi
+# Get prebuilts
+echo -e "${txtylw}Downloading prebuilts...${txtrst}"
+pushd vendor/cm
+./get-prebuilts
+popd
 
 # Setting up Build Environment
 echo -e "${txtgrn}Setting up Build Environment...${txtrst}"
