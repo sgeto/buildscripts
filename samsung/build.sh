@@ -422,6 +422,9 @@ case "$ADDITIONAL" in
 
         make -j${THREADS} out/target/product/${COMMAND}/boot.img
         make -j${THREADS} updater
+        if [ ! -e out/host/linux-x86/framework/signapk.jar ]; then
+            make -j${THREADS} signapk
+        fi
         create_kernel_zip
 		;;
 	*)
