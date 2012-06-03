@@ -397,11 +397,13 @@ esac
 
 brunch=${lunch}
 
-# Get prebuilts
-echo -e "${txtylw}Downloading prebuilts...${txtrst}"
-pushd vendor/cm
-./get-prebuilts
-popd
+if [ $ADDITIONAL != "kernel" ]; then
+    # Get prebuilts
+    echo -e "${txtylw}Downloading prebuilts...${txtrst}"
+    pushd vendor/cm
+    ./get-prebuilts
+    popd
+fi
 
 # Setting up Build Environment
 echo -e "${txtgrn}Setting up Build Environment...${txtrst}"
