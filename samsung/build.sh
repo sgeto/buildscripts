@@ -391,9 +391,9 @@ case "$COMMAND" in
 	    ;;
 	*)
 		echo -e "${txtred}Usage: $0 DEVICE ADDITIONAL"
-		echo -e "Example: ./build.sh galaxys2"
-		echo -e "Example: ./build.sh galaxys2 kernel"
-		echo -e "Supported Devices: captivatemtd, epic, fascinate, galaxys2, i777, galaxynote, galaxysmtd, galaxysbmtd, maguro, vibrantmtd${txtrst}"
+		echo -e "Example: ./build.sh i9300"
+		echo -e "Example: ./build.sh i9300 kernel"
+		echo -e "Supported Devices: captivatemtd, epic, fascinate, galaxys2, galaxysmtd, galaxysbmtd, i777, i9100g, i9300, n7000, maguro, vibrantmtd${txtrst}"
 		exit 2
 		;;
 esac
