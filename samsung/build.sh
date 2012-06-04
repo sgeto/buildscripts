@@ -368,6 +368,9 @@ case "$COMMAND" in
 	i9100g)
 		lunch=cm_i9100g-userdebug
 		;;
+	i9300)
+		lunch=cm_i9300-userdebug
+		;;
 	galaxysl)
 		lunch=cm_galaxysl-userdebug
 		;;
