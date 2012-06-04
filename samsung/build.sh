@@ -397,7 +397,7 @@ esac
 
 brunch=${lunch}
 
-if [ $ADDITIONAL != "kernel" ]; then
+if [ "$ADDITIONAL" != "kernel" ]; then
     # Get prebuilts
     echo -e "${txtylw}Downloading prebuilts...${txtrst}"
     pushd vendor/cm
