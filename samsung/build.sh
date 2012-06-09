@@ -412,7 +412,7 @@ fi
 # Apply patches
 if [ -f $CURRENT_DIR/patch.sh ]; then
     echo -e "${txtylw}Applying patches...${txtrst}"
-    $CURRENT_DIR/patch.sh
+    source $CURRENT_DIR/patch.sh
 fi
 
 # Setting up Build Environment
@@ -424,7 +424,7 @@ export CROSS_COMPILE=${TOP}/prebuilt/linux-x86/toolchain/arm-eabi-4.4.3/bin/arm-
 
 # Allow setting of additional flags
 if [ -f $CURRENT_DIR/env.sh ]; then
-    $CURRENT_DIR/env.sh
+    source $CURRENT_DIR/env.sh
 fi
 
 # Start the Build
