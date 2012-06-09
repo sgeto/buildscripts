@@ -422,6 +422,11 @@ lunch ${lunch}
 
 export CROSS_COMPILE=${TOP}/prebuilt/linux-x86/toolchain/arm-eabi-4.4.3/bin/arm-eabi-
 
+# Allow setting of additional flags
+if [ -f $CURRENT_DIR/env.sh ]; then
+    $CURRENT_DIR/env.sh
+fi
+
 # Start the Build
 case "$ADDITIONAL" in
 	kernel)
