@@ -3,6 +3,7 @@
 COMMAND="$1"
 ADDITIONAL="$2"
 TOP=${PWD}
+CURRENT_DIR=`dirname $0`
 
 # Common defines (Arch-dependent)
 case `uname -s` in
@@ -406,6 +407,12 @@ if [ "$ADDITIONAL" != "kernel" ]; then
     pushd vendor/cm
     ./get-prebuilts
     popd
+fi
+
+# Apply patches
+if [ -f $CURRENT_DIR/patch.sh ]; then
+    echo -e "${txtylw}Applying patches...${txtrst}"
+    $CURRENT_DIR/patch.sh
 fi
 
 # Setting up Build Environment
