@@ -345,6 +345,66 @@ create_kernel_zip()
                 md5sum kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip
                 cd ${TOP}
                 ;;
+            p5100)
+                cd out/target/product/${COMMAND}
+
+                rm -rf kernel_zip
+                rm kernel-cm-9-*
+
+                mkdir -p kernel_zip/system/lib/modules
+                mkdir -p kernel_zip/META-INF/com/google/android
+
+                echo "Copying boot.img..."
+                cp boot.img kernel_zip/
+                echo "Copying kernel modules..."
+                cp -R system/lib/modules/* kernel_zip/system/lib/modules
+                echo "Copying update-binary..."
+                cp obj/EXECUTABLES/updater_intermediates/updater kernel_zip/META-INF/com/google/android/update-binary
+                echo "Copying updater-script..."
+                cat ${TOP}/buildscripts/samsung/${COMMAND}/kernel_updater-script > kernel_zip/META-INF/com/google/android/updater-script
+                
+                echo "Zipping package..."
+                cd kernel_zip
+                zip -qr ../kernel-cm-9-$(date +%Y%m%d)-${COMMAND}.zip ./
+                cd ${TOP}/out/target/product/${COMMAND}
+
+                echo "Signing package..."
+                java -jar ${TOP}/out/host/linux-x86/framework/signapk.jar ${TOP}/build/target/product/security/testkey.x509.pem ${TOP}/build/target/product/security/testkey.pk8 kernel-cm-9-$(date +%Y%m%d)-${COMMAND}.zip kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip
+                rm kernel-cm-9-$(date +%Y%m%d)-${COMMAND}.zip
+                echo -e "${txtgrn}Package complete:${txtrst} out/target/product/${COMMAND}/kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip"
+                md5sum kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip
+                cd ${TOP}
+                ;;
+            p5110)
+                cd out/target/product/${COMMAND}
+
+                rm -rf kernel_zip
+                rm kernel-cm-9-*
+
+                mkdir -p kernel_zip/system/lib/modules
+                mkdir -p kernel_zip/META-INF/com/google/android
+
+                echo "Copying boot.img..."
+                cp boot.img kernel_zip/
+                echo "Copying kernel modules..."
+                cp -R system/lib/modules/* kernel_zip/system/lib/modules
+                echo "Copying update-binary..."
+                cp obj/EXECUTABLES/updater_intermediates/updater kernel_zip/META-INF/com/google/android/update-binary
+                echo "Copying updater-script..."
+                cat ${TOP}/buildscripts/samsung/${COMMAND}/kernel_updater-script > kernel_zip/META-INF/com/google/android/updater-script
+                
+                echo "Zipping package..."
+                cd kernel_zip
+                zip -qr ../kernel-cm-9-$(date +%Y%m%d)-${COMMAND}.zip ./
+                cd ${TOP}/out/target/product/${COMMAND}
+
+                echo "Signing package..."
+                java -jar ${TOP}/out/host/linux-x86/framework/signapk.jar ${TOP}/build/target/product/security/testkey.x509.pem ${TOP}/build/target/product/security/testkey.pk8 kernel-cm-9-$(date +%Y%m%d)-${COMMAND}.zip kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip
+                rm kernel-cm-9-$(date +%Y%m%d)-${COMMAND}.zip
+                echo -e "${txtgrn}Package complete:${txtrst} out/target/product/${COMMAND}/kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip"
+                md5sum kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip
+                cd ${TOP}
+                ;;
             *)
                 echo -e "${txtred}No instructions to create out/target/product/${COMMAND}/kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip... skipping."
                 echo -e "\r\n ${txtrst}"
@@ -417,6 +477,12 @@ case "$COMMAND" in
 	maguro)
 		lunch=cm_maguro-userdebug
 		;;
+	p5100)
+		lunch=cm_p5100-userdebug
+		;;
+	p5110)
+		lunch=cm_p5110-userdebug
+		;;
 	vibrantmtd)
 	    lunch=cm_vibrantmtd-userdebug
 	    ;;
@@ -424,7 +490,7 @@ case "$COMMAND" in
 		echo -e "${txtred}Usage: $0 DEVICE ADDITIONAL"
 		echo -e "Example: ./build.sh i9300"
 		echo -e "Example: ./build.sh i9300 kernel"
-		echo -e "Supported Devices: captivatemtd, epic, fascinate, galaxys2, galaxysmtd, galaxysbmtd, i777, i9100g, i9300, n7000, maguro, vibrantmtd${txtrst}"
+		echo -e "Supported Devices: captivatemtd, epic, fascinate, galaxys2, galaxysmtd, galaxysbmtd, i777, i9100g, i9300, n7000, p5100, p5110, maguro, vibrantmtd${txtrst}"
 		exit 2
 		;;
 esac
