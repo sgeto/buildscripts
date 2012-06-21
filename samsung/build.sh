@@ -405,7 +405,6 @@ create_kernel_zip()
                 md5sum kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip
                 cd ${TOP}
                 ;;
-            *)
             p5113)
                 cd out/target/product/${COMMAND}
 
