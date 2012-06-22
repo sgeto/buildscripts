@@ -221,226 +221,41 @@ prepare_environment()
 create_kernel_zip()
 {
     if [ -e out/target/product/${COMMAND}/boot.img ]; then
+        if [ -e ${TOP}/buildscripts/samsung/${COMMAND}/kernel_updater-script ]; then
 
-        echo -e "${txtylw}Package KERNELUPDATE:${txtrst} out/target/product/${COMMAND}/kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip"
+            echo -e "${txtylw}Package KERNELUPDATE:${txtrst} out/target/product/${COMMAND}/kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip"
+            cd out/target/product/${COMMAND}
 
-        case ${COMMAND} in
-            galaxys2)
-                cd out/target/product/${COMMAND}
+            rm -rf kernel_zip
+            rm kernel-cm-9-*
 
-                rm -rf kernel_zip
-                rm kernel-cm-9-*
+            mkdir -p kernel_zip/system/lib/modules
+            mkdir -p kernel_zip/META-INF/com/google/android
 
-                mkdir -p kernel_zip/system/lib/modules
-                mkdir -p kernel_zip/META-INF/com/google/android
-
-                echo "Copying boot.img..."
-                cp boot.img kernel_zip/
-                echo "Copying kernel modules..."
-                cp -R system/lib/modules/* kernel_zip/system/lib/modules
-                echo "Copying update-binary..."
-                cp obj/EXECUTABLES/updater_intermediates/updater kernel_zip/META-INF/com/google/android/update-binary
-                echo "Copying updater-script..."
-                cat ${TOP}/buildscripts/samsung/${COMMAND}/kernel_updater-script > kernel_zip/META-INF/com/google/android/updater-script
+            echo "Copying boot.img..."
+            cp boot.img kernel_zip/
+            echo "Copying kernel modules..."
+            cp -R system/lib/modules/* kernel_zip/system/lib/modules
+            echo "Copying update-binary..."
+            cp obj/EXECUTABLES/updater_intermediates/updater kernel_zip/META-INF/com/google/android/update-binary
+            echo "Copying updater-script..."
+            cat ${TOP}/buildscripts/samsung/${COMMAND}/kernel_updater-script > kernel_zip/META-INF/com/google/android/updater-script
                 
-                echo "Zipping package..."
-                cd kernel_zip
-                zip -qr ../kernel-cm-9-$(date +%Y%m%d)-${COMMAND}.zip ./
-                cd ${TOP}/out/target/product/${COMMAND}
+            echo "Zipping package..."
+            cd kernel_zip
+            zip -qr ../kernel-cm-9-$(date +%Y%m%d)-${COMMAND}.zip ./
+            cd ${TOP}/out/target/product/${COMMAND}
 
-                echo "Signing package..."
-                java -jar ${TOP}/out/host/linux-x86/framework/signapk.jar ${TOP}/build/target/product/security/testkey.x509.pem ${TOP}/build/target/product/security/testkey.pk8 kernel-cm-9-$(date +%Y%m%d)-${COMMAND}.zip kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip
-                rm kernel-cm-9-$(date +%Y%m%d)-${COMMAND}.zip
-                echo -e "${txtgrn}Package complete:${txtrst} out/target/product/${COMMAND}/kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip"
-                md5sum kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip
-                cd ${TOP}
-                ;;
-            i777)
-                cd out/target/product/${COMMAND}
-
-                rm -rf kernel_zip
-                rm kernel-cm-9-*
-
-                mkdir -p kernel_zip/system/lib/modules
-                mkdir -p kernel_zip/META-INF/com/google/android
-
-                echo "Copying boot.img..."
-                cp boot.img kernel_zip/
-                echo "Copying kernel modules..."
-                cp -R system/lib/modules/* kernel_zip/system/lib/modules
-                echo "Copying update-binary..."
-                cp obj/EXECUTABLES/updater_intermediates/updater kernel_zip/META-INF/com/google/android/update-binary
-                echo "Copying updater-script..."
-                cat ${TOP}/buildscripts/samsung/${COMMAND}/kernel_updater-script > kernel_zip/META-INF/com/google/android/updater-script
-                
-                echo "Zipping package..."
-                cd kernel_zip
-                zip -qr ../kernel-cm-9-$(date +%Y%m%d)-${COMMAND}.zip ./
-                cd ${TOP}/out/target/product/${COMMAND}
-
-                echo "Signing package..."
-                java -jar ${TOP}/out/host/linux-x86/framework/signapk.jar ${TOP}/build/target/product/security/testkey.x509.pem ${TOP}/build/target/product/security/testkey.pk8 kernel-cm-9-$(date +%Y%m%d)-${COMMAND}.zip kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip
-                rm kernel-cm-9-$(date +%Y%m%d)-${COMMAND}.zip
-                echo -e "${txtgrn}Package complete:${txtrst} out/target/product/${COMMAND}/kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip"
-                md5sum kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip
-                cd ${TOP}
-                ;;
-            i9100g)
-                cd out/target/product/${COMMAND}
-
-                rm -rf kernel_zip
-                rm kernel-cm-9-*
-
-                mkdir -p kernel_zip/system/lib/modules
-                mkdir -p kernel_zip/META-INF/com/google/android
-
-                echo "Copying boot.img..."
-                cp boot.img kernel_zip/
-                echo "Copying kernel modules..."
-                cp -R system/lib/modules/* kernel_zip/system/lib/modules
-                echo "Copying update-binary..."
-                cp obj/EXECUTABLES/updater_intermediates/updater kernel_zip/META-INF/com/google/android/update-binary
-                echo "Copying updater-script..."
-                cat ${TOP}/buildscripts/samsung/${COMMAND}/kernel_updater-script > kernel_zip/META-INF/com/google/android/updater-script
-                
-                echo "Zipping package..."
-                cd kernel_zip
-                zip -qr ../kernel-cm-9-$(date +%Y%m%d)-${COMMAND}.zip ./
-                cd ${TOP}/out/target/product/${COMMAND}
-
-                echo "Signing package..."
-                java -jar ${TOP}/out/host/linux-x86/framework/signapk.jar ${TOP}/build/target/product/security/testkey.x509.pem ${TOP}/build/target/product/security/testkey.pk8 kernel-cm-9-$(date +%Y%m%d)-${COMMAND}.zip kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip
-                rm kernel-cm-9-$(date +%Y%m%d)-${COMMAND}.zip
-                echo -e "${txtgrn}Package complete:${txtrst} out/target/product/${COMMAND}/kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip"
-                md5sum kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip
-                cd ${TOP}
-                ;;
-            i9300)
-                cd out/target/product/${COMMAND}
-
-                rm -rf kernel_zip
-                rm kernel-cm-9-*
-
-                mkdir -p kernel_zip/system/lib/modules
-                mkdir -p kernel_zip/META-INF/com/google/android
-
-                echo "Copying boot.img..."
-                cp boot.img kernel_zip/
-                echo "Copying kernel modules..."
-                cp -R system/lib/modules/* kernel_zip/system/lib/modules
-                echo "Copying update-binary..."
-                cp obj/EXECUTABLES/updater_intermediates/updater kernel_zip/META-INF/com/google/android/update-binary
-                echo "Copying updater-script..."
-                cat ${TOP}/buildscripts/samsung/${COMMAND}/kernel_updater-script > kernel_zip/META-INF/com/google/android/updater-script
-                
-                echo "Zipping package..."
-                cd kernel_zip
-                zip -qr ../kernel-cm-9-$(date +%Y%m%d)-${COMMAND}.zip ./
-                cd ${TOP}/out/target/product/${COMMAND}
-
-                echo "Signing package..."
-                java -jar ${TOP}/out/host/linux-x86/framework/signapk.jar ${TOP}/build/target/product/security/testkey.x509.pem ${TOP}/build/target/product/security/testkey.pk8 kernel-cm-9-$(date +%Y%m%d)-${COMMAND}.zip kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip
-                rm kernel-cm-9-$(date +%Y%m%d)-${COMMAND}.zip
-                echo -e "${txtgrn}Package complete:${txtrst} out/target/product/${COMMAND}/kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip"
-                md5sum kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip
-                cd ${TOP}
-                ;;
-            p5100)
-                cd out/target/product/${COMMAND}
-
-                rm -rf kernel_zip
-                rm kernel-cm-9-*
-
-                mkdir -p kernel_zip/system/lib/modules
-                mkdir -p kernel_zip/META-INF/com/google/android
-
-                echo "Copying boot.img..."
-                cp boot.img kernel_zip/
-                echo "Copying kernel modules..."
-                cp -R system/lib/modules/* kernel_zip/system/lib/modules
-                echo "Copying update-binary..."
-                cp obj/EXECUTABLES/updater_intermediates/updater kernel_zip/META-INF/com/google/android/update-binary
-                echo "Copying updater-script..."
-                cat ${TOP}/buildscripts/samsung/${COMMAND}/kernel_updater-script > kernel_zip/META-INF/com/google/android/updater-script
-                
-                echo "Zipping package..."
-                cd kernel_zip
-                zip -qr ../kernel-cm-9-$(date +%Y%m%d)-${COMMAND}.zip ./
-                cd ${TOP}/out/target/product/${COMMAND}
-
-                echo "Signing package..."
-                java -jar ${TOP}/out/host/linux-x86/framework/signapk.jar ${TOP}/build/target/product/security/testkey.x509.pem ${TOP}/build/target/product/security/testkey.pk8 kernel-cm-9-$(date +%Y%m%d)-${COMMAND}.zip kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip
-                rm kernel-cm-9-$(date +%Y%m%d)-${COMMAND}.zip
-                echo -e "${txtgrn}Package complete:${txtrst} out/target/product/${COMMAND}/kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip"
-                md5sum kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip
-                cd ${TOP}
-                ;;
-            p5110)
-                cd out/target/product/${COMMAND}
-
-                rm -rf kernel_zip
-                rm kernel-cm-9-*
-
-                mkdir -p kernel_zip/system/lib/modules
-                mkdir -p kernel_zip/META-INF/com/google/android
-
-                echo "Copying boot.img..."
-                cp boot.img kernel_zip/
-                echo "Copying kernel modules..."
-                cp -R system/lib/modules/* kernel_zip/system/lib/modules
-                echo "Copying update-binary..."
-                cp obj/EXECUTABLES/updater_intermediates/updater kernel_zip/META-INF/com/google/android/update-binary
-                echo "Copying updater-script..."
-                cat ${TOP}/buildscripts/samsung/${COMMAND}/kernel_updater-script > kernel_zip/META-INF/com/google/android/updater-script
-                
-                echo "Zipping package..."
-                cd kernel_zip
-                zip -qr ../kernel-cm-9-$(date +%Y%m%d)-${COMMAND}.zip ./
-                cd ${TOP}/out/target/product/${COMMAND}
-
-                echo "Signing package..."
-                java -jar ${TOP}/out/host/linux-x86/framework/signapk.jar ${TOP}/build/target/product/security/testkey.x509.pem ${TOP}/build/target/product/security/testkey.pk8 kernel-cm-9-$(date +%Y%m%d)-${COMMAND}.zip kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip
-                rm kernel-cm-9-$(date +%Y%m%d)-${COMMAND}.zip
-                echo -e "${txtgrn}Package complete:${txtrst} out/target/product/${COMMAND}/kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip"
-                md5sum kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip
-                cd ${TOP}
-                ;;
-            p5113)
-                cd out/target/product/${COMMAND}
-
-                rm -rf kernel_zip
-                rm kernel-cm-9-*
-
-                mkdir -p kernel_zip/system/lib/modules
-                mkdir -p kernel_zip/META-INF/com/google/android
-
-                echo "Copying boot.img..."
-                cp boot.img kernel_zip/
-                echo "Copying kernel modules..."
-                cp -R system/lib/modules/* kernel_zip/system/lib/modules
-                echo "Copying update-binary..."
-                cp obj/EXECUTABLES/updater_intermediates/updater kernel_zip/META-INF/com/google/android/update-binary
-                echo "Copying updater-script..."
-                cat ${TOP}/buildscripts/samsung/${COMMAND}/kernel_updater-script > kernel_zip/META-INF/com/google/android/updater-script
-                
-                echo "Zipping package..."
-                cd kernel_zip
-                zip -qr ../kernel-cm-9-$(date +%Y%m%d)-${COMMAND}.zip ./
-                cd ${TOP}/out/target/product/${COMMAND}
-
-                echo "Signing package..."
-                java -jar ${TOP}/out/host/linux-x86/framework/signapk.jar ${TOP}/build/target/product/security/testkey.x509.pem ${TOP}/build/target/product/security/testkey.pk8 kernel-cm-9-$(date +%Y%m%d)-${COMMAND}.zip kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip
-                rm kernel-cm-9-$(date +%Y%m%d)-${COMMAND}.zip
-                echo -e "${txtgrn}Package complete:${txtrst} out/target/product/${COMMAND}/kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip"
-                md5sum kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip
-                cd ${TOP}
-                ;;
-            *)
-                echo -e "${txtred}No instructions to create out/target/product/${COMMAND}/kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip... skipping."
-                echo -e "\r\n ${txtrst}"
-                ;;
-        esac
-
+            echo "Signing package..."
+            java -jar ${TOP}/out/host/linux-x86/framework/signapk.jar ${TOP}/build/target/product/security/testkey.x509.pem ${TOP}/build/target/product/security/testkey.pk8 kernel-cm-9-$(date +%Y%m%d)-${COMMAND}.zip kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip
+            rm kernel-cm-9-$(date +%Y%m%d)-${COMMAND}.zip
+            echo -e "${txtgrn}Package complete:${txtrst} out/target/product/${COMMAND}/kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip"
+            md5sum kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip
+            cd ${TOP}
+        else
+            echo -e "${txtred}No instructions to create out/target/product/${COMMAND}/kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip... skipping."
+            echo -e "\r\n ${txtrst}"
+        fi
     fi
 }
 
@@ -474,61 +289,11 @@ case "$COMMAND" in
 		rm -rf ./out/target/product
 		exit
 		;;
-	captivatemtd)
-		lunch=cm_captivatemtd-userdebug
-	    ;;
-	fascinatemtd)
-		lunch=cm_fascinatemtd-userdebug
-		;;
-	galaxys2)
-		lunch=cm_galaxys2-userdebug
-		;;
-	i777)
-		lunch=cm_i777-userdebug
-		;;
-	i9100g)
-		lunch=cm_i9100g-userdebug
-		;;
-	i9300)
-		lunch=cm_i9300-userdebug
-		;;
-	galaxysl)
-		lunch=cm_galaxysl-userdebug
-		;;
-	n7000)
-		lunch=cm_n7000-userdebug
-		;;
-	galaxysmtd)
-		lunch=cm_galaxysmtd-userdebug
-		;;
-	galaxysbmtd)
-		lunch=cm_galaxysbmtd-userdebug
-		;;
-	maguro)
-		lunch=cm_maguro-userdebug
-		;;
-	p5100)
-		lunch=cm_p5100-userdebug
-		;;
-	p5110)
-		lunch=cm_p5110-userdebug
-		;;
-	p5113)
-		lunch=cm_p5113-userdebug
-		;;
-	vibrantmtd)
-	    lunch=cm_vibrantmtd-userdebug
-	    ;;
 	*)
-		echo -e "${txtred}Usage: $0 DEVICE ADDITIONAL"
-		echo -e "Example: ./build.sh i9300"
-		echo -e "Example: ./build.sh i9300 kernel"
-		echo -e "Supported Devices: captivatemtd, epic, fascinate, galaxys2, galaxysmtd, galaxysbmtd, i777, i9100g, i9300, n7000, p5100, p5110, maguro, vibrantmtd${txtrst}"
-		exit 2
-		;;
+		lunch=cm_${COMMAND}-userdebug
+        brunch=${lunch}
+	    ;;
 esac
-
-brunch=${lunch}
 
 if [ "$ADDITIONAL" != "kernel" ]; then
     # Get prebuilts
@@ -564,6 +329,7 @@ case "$ADDITIONAL" in
         rm -rf out/target/product/${COMMAND}/obj/KERNEL_OBJ
         rm out/target/product/${COMMAND}/kernel
         rm out/target/product/${COMMAND}/boot.img
+        rm out/target/product/${COMMAND}/root
         rm -rf out/target/product/${COMMAND}/ramdisk*
 
         make -j${THREADS} out/target/product/${COMMAND}/boot.img
