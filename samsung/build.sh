@@ -227,7 +227,7 @@ create_kernel_zip()
             cd out/target/product/${COMMAND}
 
             rm -rf kernel_zip
-            rm kernel-cm-9-*
+            rm kernel-cm-10-*
 
             mkdir -p kernel_zip/system/lib/modules
             mkdir -p kernel_zip/META-INF/com/google/android
@@ -243,17 +243,17 @@ create_kernel_zip()
                 
             echo "Zipping package..."
             cd kernel_zip
-            zip -qr ../kernel-cm-9-$(date +%Y%m%d)-${COMMAND}.zip ./
+            zip -qr ../kernel-cm-10-$(date +%Y%m%d)-${COMMAND}.zip ./
             cd ${TOP}/out/target/product/${COMMAND}
 
             echo "Signing package..."
-            java -jar ${TOP}/out/host/linux-x86/framework/signapk.jar ${TOP}/build/target/product/security/testkey.x509.pem ${TOP}/build/target/product/security/testkey.pk8 kernel-cm-9-$(date +%Y%m%d)-${COMMAND}.zip kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip
-            rm kernel-cm-9-$(date +%Y%m%d)-${COMMAND}.zip
-            echo -e "${txtgrn}Package complete:${txtrst} out/target/product/${COMMAND}/kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip"
-            md5sum kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip
+            java -jar ${TOP}/out/host/linux-x86/framework/signapk.jar ${TOP}/build/target/product/security/testkey.x509.pem ${TOP}/build/target/product/security/testkey.pk8 kernel-cm-10-$(date +%Y%m%d)-${COMMAND}.zip kernel-cm-10-$(date +%Y%m%d)-${COMMAND}-signed.zip
+            rm kernel-cm-10-$(date +%Y%m%d)-${COMMAND}.zip
+            echo -e "${txtgrn}Package complete:${txtrst} out/target/product/${COMMAND}/kernel-cm-10-$(date +%Y%m%d)-${COMMAND}-signed.zip"
+            md5sum kernel-cm-10-$(date +%Y%m%d)-${COMMAND}-signed.zip
             cd ${TOP}
         else
-            echo -e "${txtred}No instructions to create out/target/product/${COMMAND}/kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip... skipping."
+            echo -e "${txtred}No instructions to create out/target/product/${COMMAND}/kernel-cm-10-$(date +%Y%m%d)-${COMMAND}-signed.zip... skipping."
             echo -e "\r\n ${txtrst}"
         fi
     fi
@@ -268,7 +268,7 @@ echo -e "${txtblu}          | |  |  __|   / /\ \ | |\/| |  __  | / /\ \| |    | 
 echo -e "${txtblu}          | |  | |____ / ____ \| |  | | |  | |/ ____ \ |____| . \ ____) | |__| | |\  | |__| |"
 echo -e "${txtblu}          |_|  |______/_/    \_\_|  |_|_|  |_/_/    \_\_____|_|\_\_____/ \____/|_| \_|\_____|"
 echo -e "${txtblu} \r\n"
-echo -e "${txtblu}                                    CyanogenMod 9 buildscript"
+echo -e "${txtblu}                                   CyanogenMod 10 buildscript"
 echo -e "${txtblu}                             visit us @ http://www.teamhacksung.org"
 echo -e "${txtblu} \r\n"
 echo -e "${txtblu} ###################################################################################################"
@@ -313,8 +313,6 @@ fi
 echo -e "${txtgrn}Setting up Build Environment...${txtrst}"
 . build/envsetup.sh
 lunch ${lunch}
-
-export CROSS_COMPILE=${TOP}/prebuilt/linux-x86/toolchain/arm-eabi-4.4.3/bin/arm-eabi-
 
 # Allow setting of additional flags
 if [ -f $CURRENT_DIR/env.sh ]; then

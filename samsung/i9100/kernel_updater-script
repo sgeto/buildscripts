@@ -3,7 +3,8 @@ ui_print(">> CyanogenMod Bootimage Updater");
 ui_print(">> for Samsung Galaxy S II");
 ui_print(">>");
 
-assert(getprop("ro.product.device") == "galaxys2" || getprop("ro.build.product") == "galaxys2" || getprop("ro.product.board") == "galaxys2" || 
+assert(getprop("ro.product.device") == "galaxys2" || getprop("ro.build.product") == "galaxys2" || getprop("ro.product.board") == "galaxys2" ||
+       getprop("ro.product.device") == "i9100" || getprop("ro.build.product") == "i9100" || getprop("ro.product.board") == "i9100" ||
        getprop("ro.product.device") == "GT-I9100" || getprop("ro.build.product") == "GT-I9100" || getprop("ro.product.board") == "GT-I9100" || 
        getprop("ro.product.device") == "GT-I9100M" || getprop("ro.build.product") == "GT-I9100M" || getprop("ro.product.board") == "GT-I9100M" || 
        getprop("ro.product.device") == "GT-I9100P" || getprop("ro.build.product") == "GT-I9100P" || getprop("ro.product.board") == "GT-I9100P" || 
