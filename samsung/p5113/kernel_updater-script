@@ -4,7 +4,8 @@ ui_print(">>   for Samsung Galaxy Tab 2");
 ui_print(">>");
 
 assert(getprop("ro.product.device") == "p5113" || getprop("ro.build.product") == "p5113" || getprop("ro.product.board") == "p5113" || 
-       getprop("ro.product.device") == "GT-P5113" || getprop("ro.build.product") == "GT-P5113" || getprop("ro.product.board") == "GT-P5113");
+       getprop("ro.product.device") == "GT-P5113" || getprop("ro.build.product") == "GT-P5113" || getprop("ro.product.board") == "GT-P5113" ||
+       getprop("ro.product.device") == "espresso10wifi" || getprop("ro.build.product") == "espresso10wifi" || getprop("ro.product.board") == "espresso10wifi");
 
 show_progress(0.200000, 2);
 mount("ext4", "EMMC", "/dev/block/mmcblk0p9", "/system");
