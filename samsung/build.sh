@@ -325,6 +325,7 @@ case "$ADDITIONAL" in
 		echo -e "${txtgrn}Rebuilding bootimage...${txtrst}"
 
         rm -rf out/target/product/${COMMAND}/obj/KERNEL_OBJ
+        rm -rf out/target/product/${COMMAND}/kernel_zip
         rm out/target/product/${COMMAND}/kernel
         rm out/target/product/${COMMAND}/boot.img
         rm out/target/product/${COMMAND}/root
@@ -336,6 +337,17 @@ case "$ADDITIONAL" in
             make -j${THREADS} signapk
         fi
         create_kernel_zip
+		;;
+	recovery)
+		echo -e "${txtgrn}Rebuilding recoveryimage...${txtrst}"
+
+        rm -rf out/target/product/${COMMAND}/obj/KERNEL_OBJ
+        rm out/target/product/${COMMAND}/kernel
+        rm out/target/product/${COMMAND}/recovery.img
+        rm out/target/product/${COMMAND}/recovery
+        rm -rf out/target/product/${COMMAND}/ramdisk*
+
+        make -j${THREADS} out/target/product/${COMMAND}/recovery.img
 		;;
 	*)
 		echo -e "${txtgrn}Building Android...${txtrst}"
