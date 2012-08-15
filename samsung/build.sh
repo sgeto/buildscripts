@@ -40,33 +40,6 @@ install_sun_jdk()
     apt-get install sun-java6-jdk
 }
 
-install_ubuntu_packages()
-{
-    case $arch in
-    "1")
-        # i686
-        apt-get install git-core gnupg flex bison gperf build-essential \
-        zip curl zlib1g-dev libc6-dev libncurses5-dev x11proto-core-dev \
-        libx11-dev libreadline6-dev libgl1-mesa-dev tofrodos python-markdown \
-        libxml2-utils xsltproc
-        ;;
-    "2")
-        # x86_64
-        apt-get install git-core gnupg flex bison gperf build-essential \
-        zip curl zlib1g-dev libc6-dev lib32ncurses5-dev ia32-libs \
-        x11proto-core-dev libx11-dev lib32readline5-dev lib32z-dev \
-        libgl1-mesa-dev g++-multilib mingw32 tofrodos python-markdown \
-        libxml2-utils xsltproc
-        ;;
-    *)
-        # no arch
-        echo -e "${txtred}No arch defined, aborting."
-        echo -e "\r\n ${txtrst}"
-        exit
-        ;;
-    esac
-}
-
 install_arch_packages()
 {
     case $arch in
@@ -89,6 +62,33 @@ install_arch_packages()
     esac
 }
 
+install_ubuntu_packages()
+{
+    case $arch in
+    "1")
+        # i686
+        apt-get install git-core gnupg flex bison gperf build-essential \
+        zip curl zlib1g-dev libc6-dev libncurses5-dev x11proto-core-dev \
+        libx11-dev libreadline6-dev libgl1-mesa-dev tofrodos python-markdown \
+        libxml2-utils xsltproc pngcrush
+        ;;
+    "2")
+        # x86_64
+        apt-get install git-core gnupg flex bison gperf build-essential \
+        zip curl zlib1g-dev libc6-dev lib32ncurses5-dev ia32-libs \
+        x11proto-core-dev libx11-dev lib32readline5-dev lib32z-dev \
+        libgl1-mesa-dev g++-multilib mingw32 tofrodos python-markdown \
+        libxml2-utils xsltproc pngcrush
+        ;;
+    *)
+        # no arch
+        echo -e "${txtred}No arch defined, aborting."
+        echo -e "\r\n ${txtrst}"
+        exit
+        ;;
+    esac
+}
+
 prepare_environment()
 {
     echo "Which distribution are you running?"
@@ -98,6 +98,7 @@ prepare_environment()
     echo "4) Ubuntu 11.10"
     echo "5) Ubuntu 12.04"
     echo "6) Arch Linux"
+    echo "7) Debian"
     read -n1 distribution
     echo -e "\r\n"
     
@@ -142,7 +143,7 @@ prepare_environment()
         zip curl libc6-dev libncurses5-dev:i386 x11proto-core-dev \
         libx11-dev:i386 libreadline6-dev:i386 libgl1-mesa-dev:i386 \
         g++-multilib mingw32 openjdk-6-jdk tofrodos python-markdown \
-        libxml2-utils xsltproc zlib1g-dev:i386
+        libxml2-utils xsltproc zlib1g-dev:i386 pngcrush
         ;;
     
     "6")
@@ -151,6 +152,24 @@ prepare_environment()
         install_arch_packages
         mv /usr/bin/python /usr/bin/python.bak
         ln -s /usr/bin/python2 /usr/bin/python
+        ;;
+    "7")
+        # Debian
+        echo "Installing packages for Debian"
+        apt-get update
+        apt-get install git-core gnupg flex bison gperf build-essential \
+		zip curl libc6-dev lib32ncurses5 libncurses5-dev x11proto-core-dev \
+		libx11-dev libreadline6-dev lib32readline-gplv2-dev libgl1-mesa-glx \
+		libgl1-mesa-dev g++-multilib mingw32 openjdk-6-jdk tofrodos \
+		python-markdown libxml2-utils xsltproc zlib1g-dev pngcrush \
+		libcurl4-gnutls-dev comerr-dev krb5-multidev libcurl4-gnutls-dev \
+		libgcrypt11-dev libglib2.0-dev libgnutls-dev libgnutls-openssl27 \
+		libgnutlsxx27 libgpg-error-dev libgssrpc4 libgstreamer-plugins-base0.10-dev \
+		libgstreamer0.10-dev libidn11-dev libkadm5clnt-mit8 libkadm5srv-mit8 \
+		libkdb5-6 libkrb5-dev libldap2-dev libp11-kit-dev librtmp-dev libtasn1-3-dev \
+		libxml2-dev tofrodos python-markdown lib32z-dev ia32-libs
+		ln -s /usr/lib32/libX11.so.6 /usr/lib32/libX11.so
+		ln -s /usr/lib32/libGL.so.1 /usr/lib32/libGL.so
         ;;
         
     *)
@@ -170,6 +189,7 @@ prepare_environment()
         echo "Choose a branch:"
         echo "1) gingerbread"
         echo "2) ics"
+        echo "3) jellybean"
         read -n1 branch
         echo -e "\r\n"
 
@@ -181,6 +201,10 @@ prepare_environment()
             "2")
                 # ics
                 branch="ics"
+                ;;
+            "3")
+                # jellybean
+                branch="jellybean"
                 ;;
             *)
                 # no branch
