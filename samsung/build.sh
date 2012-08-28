@@ -46,12 +46,14 @@ install_arch_packages()
     "1")
         # i686
         pacman -S openjdk6 perl git gnupg flex bison gperf zip unzip sdl wxgtk \
-        squashfs-tools ncurses libpng zlib libusb libusb-compat readline
+        squashfs-tools ncurses libpng zlib libusb libusb-compat readline schedtool \
+        optipng
         ;;
     "2")
         # x86_64
         pacman -S openjdk6 perl git gnupg flex bison gperf zip unzip sdl wxgtk \
-        squashfs-tools ncurses libpng zlib libusb libusb-compat readline gcc-multilib
+        squashfs-tools ncurses libpng zlib libusb libusb-compat readline schedtool \
+        optipng
         ;;
     *)
         # no arch
