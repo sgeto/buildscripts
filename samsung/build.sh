@@ -345,6 +345,13 @@ if [ -f $CURRENT_DIR/env.sh ]; then
     source $CURRENT_DIR/env.sh
 fi
 
+# fix module copy for archlinux
+mkdir -p out/target/product/${COMMAND}/system/lib
+mkdir -p out/target/product/${COMMAND}/system/usr
+cd out/target/product/${COMMAND}/system/usr
+ln -sf ../lib .
+cd -
+
 # Start the Build
 case "$ADDITIONAL" in
 	kernel)
