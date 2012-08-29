@@ -47,13 +47,14 @@ install_arch_packages()
         # i686
         pacman -S openjdk6 perl git gnupg flex bison gperf zip unzip sdl wxgtk \
         squashfs-tools ncurses libpng zlib libusb libusb-compat readline schedtool \
-        optipng python2
+        optipng python2 perl-switch
         ;;
     "2")
         # x86_64
         pacman -S openjdk6 perl git gnupg flex bison gperf zip unzip sdl wxgtk \
         squashfs-tools ncurses libpng zlib libusb libusb-compat readline schedtool \
-        optipng gcc-multilib gcc-libs-multilib lib32-gcc-libs lib32-zlib python2
+        optipng python2 perl-switch lib32-zlib lib32-ncurses lib32-readline \
+        gcc-libs-multilib gcc-multilib lib32-gcc-libs
         ;;
     *)
         # no arch
