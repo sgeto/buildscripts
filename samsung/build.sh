@@ -1,9 +1,9 @@
 #!/bin/bash
 
-COMMAND="$1"
-ADDITIONAL="$2"
-BSTOP=${PWD}
-CURRENT_DIR=`dirname $0`
+CMD="$1"
+EXTRACMD="$2"
+A_TOP=${PWD}
+CUR_DIR=`dirname $0`
 
 # Common defines (Arch-dependent)
 case `uname -s` in
@@ -247,11 +247,11 @@ prepare_environment()
 # create kernel zip after successfull build
 create_kernel_zip()
 {
-    if [ -e out/target/product/${COMMAND}/boot.img ]; then
-        if [ -e ${BSTOP}/buildscripts/samsung/${COMMAND}/kernel_updater-script ]; then
+    if [ -e out/target/product/${CMD}/boot.img ]; then
+        if [ -e ${A_TOP}/buildscripts/samsung/${CMD}/kernel_updater-script ]; then
 
-            echo -e "${txtylw}Package KERNELUPDATE:${txtrst} out/target/product/${COMMAND}/kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip"
-            cd out/target/product/${COMMAND}
+            echo -e "${txtylw}Package KERNELUPDATE:${txtrst} out/target/product/${CMD}/kernel-cm-9-$(date +%Y%m%d)-${CMD}-signed.zip"
+            cd out/target/product/${CMD}
 
             rm -rf kernel_zip
             rm kernel-cm-10-*
@@ -266,21 +266,21 @@ create_kernel_zip()
             echo "Copying update-binary..."
             cp obj/EXECUTABLES/updater_intermediates/updater kernel_zip/META-INF/com/google/android/update-binary
             echo "Copying updater-script..."
-            cat ${BSTOP}/buildscripts/samsung/${COMMAND}/kernel_updater-script > kernel_zip/META-INF/com/google/android/updater-script
+            cat ${A_TOP}/buildscripts/samsung/${CMD}/kernel_updater-script > kernel_zip/META-INF/com/google/android/updater-script
                 
             echo "Zipping package..."
             cd kernel_zip
-            zip -qr ../kernel-cm-10-$(date +%Y%m%d)-${COMMAND}.zip ./
-            cd ${BSTOP}/out/target/product/${COMMAND}
+            zip -qr ../kernel-cm-10-$(date +%Y%m%d)-${CMD}.zip ./
+            cd ${A_TOP}/out/target/product/${CMD}
 
             echo "Signing package..."
-            java -jar ${TOP}/out/host/linux-x86/framework/signapk.jar ${BSTOP}/build/target/product/security/testkey.x509.pem ${BSTOP}/build/target/product/security/testkey.pk8 kernel-cm-10-$(date +%Y%m%d)-${COMMAND}.zip kernel-cm-10-$(date +%Y%m%d)-${COMMAND}-signed.zip
-            rm kernel-cm-10-$(date +%Y%m%d)-${COMMAND}.zip
-            echo -e "${txtgrn}Package complete:${txtrst} out/target/product/${COMMAND}/kernel-cm-10-$(date +%Y%m%d)-${COMMAND}-signed.zip"
-            md5sum kernel-cm-10-$(date +%Y%m%d)-${COMMAND}-signed.zip
-            cd ${BSTOP}
+            java -jar ${TOP}/out/host/linux-x86/framework/signapk.jar ${A_TOP}/build/target/product/security/testkey.x509.pem ${A_TOP}/build/target/product/security/testkey.pk8 kernel-cm-10-$(date +%Y%m%d)-${CMD}.zip kernel-cm-10-$(date +%Y%m%d)-${CMD}-signed.zip
+            rm kernel-cm-10-$(date +%Y%m%d)-${CMD}.zip
+            echo -e "${txtgrn}Package complete:${txtrst} out/target/product/${CMD}/kernel-cm-10-$(date +%Y%m%d)-${CMD}-signed.zip"
+            md5sum kernel-cm-10-$(date +%Y%m%d)-${CMD}-signed.zip
+            cd ${A_TOP}
         else
-            echo -e "${txtred}No instructions to create out/target/product/${COMMAND}/kernel-cm-10-$(date +%Y%m%d)-${COMMAND}-signed.zip... skipping."
+            echo -e "${txtred}No instructions to create out/target/product/${CMD}/kernel-cm-10-$(date +%Y%m%d)-${CMD}-signed.zip... skipping."
             echo -e "\r\n ${txtrst}"
         fi
     fi
@@ -305,7 +305,7 @@ echo -e "\r\n ${txtrst}"
 START=$(date +%s)
 
 # Device specific settings
-case "$COMMAND" in
+case "$CMD" in
     prepare)
         check_root
         prepare_environment
@@ -317,12 +317,12 @@ case "$COMMAND" in
 		exit
 		;;
 	*)
-		lunch=cm_${COMMAND}-userdebug
+		lunch=cm_${CMD}-userdebug
         brunch=${lunch}
 	    ;;
 esac
 
-if [ "$ADDITIONAL" != "kernel" ]; then
+if [ "$EXTRACMD" != "kernel" ]; then
     # Get prebuilts
     echo -e "${txtylw}Downloading prebuilts...${txtrst}"
     pushd vendor/cm
@@ -331,9 +331,9 @@ if [ "$ADDITIONAL" != "kernel" ]; then
 fi
 
 # Apply patches
-if [ -f $CURRENT_DIR/patch.sh ]; then
+if [ -f $CUR_DIR/patch.sh ]; then
     echo -e "${txtylw}Applying patches...${txtrst}"
-    source $CURRENT_DIR/patch.sh
+    source $CUR_DIR/patch.sh
 fi
 
 # Setting up Build Environment
@@ -342,30 +342,30 @@ echo -e "${txtgrn}Setting up Build Environment...${txtrst}"
 lunch ${lunch}
 
 # Allow setting of additional flags
-if [ -f $CURRENT_DIR/env.sh ]; then
-    source $CURRENT_DIR/env.sh
+if [ -f $CUR_DIR/env.sh ]; then
+    source $CUR_DIR/env.sh
 fi
 
 # fix module copy for archlinux
-mkdir -p out/target/product/${COMMAND}/system/lib
-mkdir -p out/target/product/${COMMAND}/system/usr
-cd out/target/product/${COMMAND}/system/usr
+mkdir -p out/target/product/${CMD}/system/lib
+mkdir -p out/target/product/${CMD}/system/usr
+cd out/target/product/${CMD}/system/usr
 ln -sf ../lib .
 cd -
 
 # Start the Build
-case "$ADDITIONAL" in
+case "$EXTRACMD" in
 	kernel)
 		echo -e "${txtgrn}Rebuilding bootimage...${txtrst}"
 
-        rm -rf out/target/product/${COMMAND}/obj/KERNEL_OBJ
-        rm -rf out/target/product/${COMMAND}/kernel_zip
-        rm out/target/product/${COMMAND}/kernel
-        rm out/target/product/${COMMAND}/boot.img
-        rm out/target/product/${COMMAND}/root
-        rm -rf out/target/product/${COMMAND}/ramdisk*
+        rm -rf out/target/product/${CMD}/obj/KERNEL_OBJ
+        rm -rf out/target/product/${CMD}/kernel_zip
+        rm out/target/product/${CMD}/kernel
+        rm out/target/product/${CMD}/boot.img
+        rm out/target/product/${CMD}/root
+        rm -rf out/target/product/${CMD}/ramdisk*
 
-        mka out/target/product/${COMMAND}/boot.img
+        mka out/target/product/${CMD}/boot.img
         mka updater
         if [ ! -e out/host/linux-x86/framework/signapk.jar ]; then
             make -j${THREADS} signapk
@@ -375,13 +375,13 @@ case "$ADDITIONAL" in
 	recovery)
 		echo -e "${txtgrn}Rebuilding recoveryimage...${txtrst}"
 
-        rm -rf out/target/product/${COMMAND}/obj/KERNEL_OBJ
-        rm out/target/product/${COMMAND}/kernel
-        rm out/target/product/${COMMAND}/recovery.img
-        rm out/target/product/${COMMAND}/recovery
-        rm -rf out/target/product/${COMMAND}/ramdisk*
+        rm -rf out/target/product/${CMD}/obj/KERNEL_OBJ
+        rm out/target/product/${CMD}/kernel
+        rm out/target/product/${CMD}/recovery.img
+        rm out/target/product/${CMD}/recovery
+        rm -rf out/target/product/${CMD}/ramdisk*
 
-        mka out/target/product/${COMMAND}/recovery.img
+        mka out/target/product/${CMD}/recovery.img
 		;;
 	*)
 		echo -e "${txtgrn}Building Android...${txtrst}"
