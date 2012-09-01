@@ -2,7 +2,7 @@
 
 COMMAND="$1"
 ADDITIONAL="$2"
-TOP=${PWD}
+BSTOP=${PWD}
 CURRENT_DIR=`dirname $0`
 
 # Common defines (Arch-dependent)
@@ -248,7 +248,7 @@ prepare_environment()
 create_kernel_zip()
 {
     if [ -e out/target/product/${COMMAND}/boot.img ]; then
-        if [ -e ${TOP}/buildscripts/samsung/${COMMAND}/kernel_updater-script ]; then
+        if [ -e ${BSTOP}/buildscripts/samsung/${COMMAND}/kernel_updater-script ]; then
 
             echo -e "${txtylw}Package KERNELUPDATE:${txtrst} out/target/product/${COMMAND}/kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip"
             cd out/target/product/${COMMAND}
@@ -266,19 +266,19 @@ create_kernel_zip()
             echo "Copying update-binary..."
             cp obj/EXECUTABLES/updater_intermediates/updater kernel_zip/META-INF/com/google/android/update-binary
             echo "Copying updater-script..."
-            cat ${TOP}/buildscripts/samsung/${COMMAND}/kernel_updater-script > kernel_zip/META-INF/com/google/android/updater-script
+            cat ${BSTOP}/buildscripts/samsung/${COMMAND}/kernel_updater-script > kernel_zip/META-INF/com/google/android/updater-script
                 
             echo "Zipping package..."
             cd kernel_zip
             zip -qr ../kernel-cm-10-$(date +%Y%m%d)-${COMMAND}.zip ./
-            cd ${TOP}/out/target/product/${COMMAND}
+            cd ${BSTOP}/out/target/product/${COMMAND}
 
             echo "Signing package..."
-            java -jar ${TOP}/out/host/linux-x86/framework/signapk.jar ${TOP}/build/target/product/security/testkey.x509.pem ${TOP}/build/target/product/security/testkey.pk8 kernel-cm-10-$(date +%Y%m%d)-${COMMAND}.zip kernel-cm-10-$(date +%Y%m%d)-${COMMAND}-signed.zip
+            java -jar ${TOP}/out/host/linux-x86/framework/signapk.jar ${BSTOP}/build/target/product/security/testkey.x509.pem ${BSTOP}/build/target/product/security/testkey.pk8 kernel-cm-10-$(date +%Y%m%d)-${COMMAND}.zip kernel-cm-10-$(date +%Y%m%d)-${COMMAND}-signed.zip
             rm kernel-cm-10-$(date +%Y%m%d)-${COMMAND}.zip
             echo -e "${txtgrn}Package complete:${txtrst} out/target/product/${COMMAND}/kernel-cm-10-$(date +%Y%m%d)-${COMMAND}-signed.zip"
             md5sum kernel-cm-10-$(date +%Y%m%d)-${COMMAND}-signed.zip
-            cd ${TOP}
+            cd ${BSTOP}
         else
             echo -e "${txtred}No instructions to create out/target/product/${COMMAND}/kernel-cm-10-$(date +%Y%m%d)-${COMMAND}-signed.zip... skipping."
             echo -e "\r\n ${txtrst}"
@@ -365,8 +365,8 @@ case "$ADDITIONAL" in
         rm out/target/product/${COMMAND}/root
         rm -rf out/target/product/${COMMAND}/ramdisk*
 
-        make -j${THREADS} out/target/product/${COMMAND}/boot.img
-        make -j${THREADS} updater
+        mka out/target/product/${COMMAND}/boot.img
+        mka updater
         if [ ! -e out/host/linux-x86/framework/signapk.jar ]; then
             make -j${THREADS} signapk
         fi
@@ -381,7 +381,7 @@ case "$ADDITIONAL" in
         rm out/target/product/${COMMAND}/recovery
         rm -rf out/target/product/${COMMAND}/ramdisk*
 
-        make -j${THREADS} out/target/product/${COMMAND}/recovery.img
+        mka out/target/product/${COMMAND}/recovery.img
 		;;
 	*)
 		echo -e "${txtgrn}Building Android...${txtrst}"
