@@ -274,7 +274,7 @@ create_kernel_zip()
             cd ${A_TOP}/out/target/product/${CMD}
 
             echo "Signing package..."
-            java -jar ${TOP}/out/host/linux-x86/framework/signapk.jar ${A_TOP}/build/target/product/security/testkey.x509.pem ${A_TOP}/build/target/product/security/testkey.pk8 kernel-cm-10-$(date +%Y%m%d)-${CMD}.zip kernel-cm-10-$(date +%Y%m%d)-${CMD}-signed.zip
+            java -jar ${A_TOP}/out/host/linux-x86/framework/signapk.jar ${A_TOP}/build/target/product/security/testkey.x509.pem ${A_TOP}/build/target/product/security/testkey.pk8 kernel-cm-10-$(date +%Y%m%d)-${CMD}.zip kernel-cm-10-$(date +%Y%m%d)-${CMD}-signed.zip
             rm kernel-cm-10-$(date +%Y%m%d)-${CMD}.zip
             echo -e "${txtgrn}Package complete:${txtrst} out/target/product/${CMD}/kernel-cm-10-$(date +%Y%m%d)-${CMD}-signed.zip"
             md5sum kernel-cm-10-$(date +%Y%m%d)-${CMD}-signed.zip
