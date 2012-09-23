@@ -4,6 +4,7 @@ CMD="$1"
 EXTRACMD="$2"
 A_TOP=${PWD}
 CUR_DIR=`dirname $0`
+DATE=$(date +%D)
 
 # Common defines (Arch-dependent)
 case `uname -s` in
@@ -322,12 +323,16 @@ case "$CMD" in
 	    ;;
 esac
 
+# Get prebuilts once per day
 if [ "$EXTRACMD" != "kernel" ]; then
-    # Get prebuilts
-    echo -e "${txtylw}Downloading prebuilts...${txtrst}"
-    pushd vendor/cm
-    ./get-prebuilts
-    popd
+    prebuilts=$(cat prebuilts.log)
+    if [ "$DATE" != "$prebuilts" ]; then
+        echo -e "${txtylw}Downloading prebuilts...${txtrst}"
+        pushd vendor/cm
+        ./get-prebuilts
+        popd
+        echo $DATE > prebuilts.log
+    fi
 fi
 
 # Apply patches
