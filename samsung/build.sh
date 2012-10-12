@@ -370,7 +370,7 @@ case "$EXTRACMD" in
         rm out/target/product/${CMD}/root
         rm -rf out/target/product/${CMD}/ramdisk*
 
-        mka out/target/product/${CMD}/boot.img
+        mka bootimage
         mka updater
         if [ ! -e out/host/linux-x86/framework/signapk.jar ]; then
             make -j${THREADS} signapk
