@@ -5,6 +5,7 @@ EXTRACMD="$2"
 A_TOP=${PWD}
 CUR_DIR=`dirname $0`
 DATE=$(date +%D)
+CM_VERSION=10
 
 # Common defines (Arch-dependent)
 case `uname -s` in
@@ -249,13 +250,13 @@ prepare_environment()
 create_kernel_zip()
 {
     if [ -e out/target/product/${CMD}/boot.img ]; then
-        if [ -e ${A_TOP}/buildscripts/samsung/${CMD}/kernel_updater-script ]; then
+        if [ -e ${A_TOP}/buildscripts/targets/${CMD}/kernel_updater-script ]; then
 
-            echo -e "${txtylw}Package KERNELUPDATE:${txtrst} out/target/product/${CMD}/kernel-cm-9-$(date +%Y%m%d)-${CMD}-signed.zip"
+            echo -e "${txtylw}Package KERNELUPDATE:${txtrst} out/target/product/${CMD}/kernel-cm-${CM_VERSION}-$(date +%Y%m%d)-${CMD}-signed.zip"
             cd out/target/product/${CMD}
 
             rm -rf kernel_zip
-            rm kernel-cm-10-*
+            rm kernel-cm-${CM_VERSION}-*
 
             mkdir -p kernel_zip/system/lib/modules
             mkdir -p kernel_zip/META-INF/com/google/android
@@ -267,21 +268,21 @@ create_kernel_zip()
             echo "Copying update-binary..."
             cp obj/EXECUTABLES/updater_intermediates/updater kernel_zip/META-INF/com/google/android/update-binary
             echo "Copying updater-script..."
-            cat ${A_TOP}/buildscripts/samsung/${CMD}/kernel_updater-script > kernel_zip/META-INF/com/google/android/updater-script
+            cat ${A_TOP}/buildscripts/targets/${CMD}/kernel_updater-script > kernel_zip/META-INF/com/google/android/updater-script
                 
             echo "Zipping package..."
             cd kernel_zip
-            zip -qr ../kernel-cm-10-$(date +%Y%m%d)-${CMD}.zip ./
+            zip -qr ../kernel-cm-${CM_VERSION}-$(date +%Y%m%d)-${CMD}.zip ./
             cd ${A_TOP}/out/target/product/${CMD}
 
             echo "Signing package..."
-            java -jar ${A_TOP}/out/host/linux-x86/framework/signapk.jar ${A_TOP}/build/target/product/security/testkey.x509.pem ${A_TOP}/build/target/product/security/testkey.pk8 kernel-cm-10-$(date +%Y%m%d)-${CMD}.zip kernel-cm-10-$(date +%Y%m%d)-${CMD}-signed.zip
-            rm kernel-cm-10-$(date +%Y%m%d)-${CMD}.zip
-            echo -e "${txtgrn}Package complete:${txtrst} out/target/product/${CMD}/kernel-cm-10-$(date +%Y%m%d)-${CMD}-signed.zip"
-            md5sum kernel-cm-10-$(date +%Y%m%d)-${CMD}-signed.zip
+            java -jar ${A_TOP}/out/host/linux-x86/framework/signapk.jar ${A_TOP}/build/target/product/security/testkey.x509.pem ${A_TOP}/build/target/product/security/testkey.pk8 kernel-cm-${CM_VERSION}-$(date +%Y%m%d)-${CMD}.zip kernel-cm-${CM_VERSION}-$(date +%Y%m%d)-${CMD}-signed.zip
+            rm kernel-cm-${CM_VERSION}-$(date +%Y%m%d)-${CMD}.zip
+            echo -e "${txtgrn}Package complete:${txtrst} out/target/product/${CMD}/kernel-cm-${CM_VERSION}-$(date +%Y%m%d)-${CMD}-signed.zip"
+            md5sum kernel-cm-${CM_VERSION}-$(date +%Y%m%d)-${CMD}-signed.zip
             cd ${A_TOP}
         else
-            echo -e "${txtred}No instructions to create out/target/product/${CMD}/kernel-cm-10-$(date +%Y%m%d)-${CMD}-signed.zip... skipping."
+            echo -e "${txtred}No instructions to create out/target/product/${CMD}/kernel-cm-${CM_VERSION}-$(date +%Y%m%d)-${CMD}-signed.zip... skipping."
             echo -e "\r\n ${txtrst}"
         fi
     fi
@@ -296,7 +297,7 @@ echo -e "${txtblu}          | |  |  __|   / /\ \ | |\/| |  __  | / /\ \| |    | 
 echo -e "${txtblu}          | |  | |____ / ____ \| |  | | |  | |/ ____ \ |____| . \ ____) | |__| | |\  | |__| |"
 echo -e "${txtblu}          |_|  |______/_/    \_\_|  |_|_|  |_/_/    \_\_____|_|\_\_____/ \____/|_| \_|\_____|"
 echo -e "${txtblu} \r\n"
-echo -e "${txtblu}                                   CyanogenMod 10 buildscript"
+echo -e "${txtblu}                                   CyanogenMod ${CM_VERSION} buildscript"
 echo -e "${txtblu}                             visit us @ http://www.teamhacksung.org"
 echo -e "${txtblu} \r\n"
 echo -e "${txtblu} ###################################################################################################"
