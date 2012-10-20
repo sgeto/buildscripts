@@ -368,8 +368,9 @@ case "$EXTRACMD" in
         rm -rf out/target/product/${CMD}/kernel_zip
         rm out/target/product/${CMD}/kernel
         rm out/target/product/${CMD}/boot.img
-        rm out/target/product/${CMD}/root
+        rm -rf out/target/product/${CMD}/root
         rm -rf out/target/product/${CMD}/ramdisk*
+        rm -rf out/target/product/${CMD}/combined*
 
         mka bootimage
         mka updater
