@@ -249,11 +249,13 @@ prepare_environment()
 # create kernel zip after successfull build
 create_kernel_zip()
 {
-    if [ -e out/target/product/${CMD}/boot.img ]; then
+    echo -e "${txtgrn}Creating kernel zip...${txtrst}"
+    if [ -e ${ANDROID_PRODUCT_OUT}/boot.img ]; then
+        echo -e "${txtgrn}Bootimage found...${txtrst}"
         if [ -e ${A_TOP}/buildscripts/targets/${CMD}/kernel_updater-script ]; then
 
             echo -e "${txtylw}Package KERNELUPDATE:${txtrst} out/target/product/${CMD}/kernel-cm-${CM_VERSION}-$(date +%Y%m%d)-${CMD}-signed.zip"
-            cd out/target/product/${CMD}
+            cd ${ANDROID_PRODUCT_OUT}
 
             rm -rf kernel_zip
             rm kernel-cm-${CM_VERSION}-*
@@ -273,10 +275,10 @@ create_kernel_zip()
             echo "Zipping package..."
             cd kernel_zip
             zip -qr ../kernel-cm-${CM_VERSION}-$(date +%Y%m%d)-${CMD}.zip ./
-            cd ${A_TOP}/out/target/product/${CMD}
+            cd ${ANDROID_PRODUCT_OUT}
 
             echo "Signing package..."
-            java -jar ${A_TOP}/out/host/linux-x86/framework/signapk.jar ${A_TOP}/build/target/product/security/testkey.x509.pem ${A_TOP}/build/target/product/security/testkey.pk8 kernel-cm-${CM_VERSION}-$(date +%Y%m%d)-${CMD}.zip kernel-cm-${CM_VERSION}-$(date +%Y%m%d)-${CMD}-signed.zip
+            java -jar ${ANDROID_HOST_OUT}/framework/signapk.jar ${A_TOP}/build/target/product/security/testkey.x509.pem ${A_TOP}/build/target/product/security/testkey.pk8 kernel-cm-${CM_VERSION}-$(date +%Y%m%d)-${CMD}.zip kernel-cm-${CM_VERSION}-$(date +%Y%m%d)-${CMD}-signed.zip
             rm kernel-cm-${CM_VERSION}-$(date +%Y%m%d)-${CMD}.zip
             echo -e "${txtgrn}Package complete:${txtrst} out/target/product/${CMD}/kernel-cm-${CM_VERSION}-$(date +%Y%m%d)-${CMD}-signed.zip"
             md5sum kernel-cm-${CM_VERSION}-$(date +%Y%m%d)-${CMD}-signed.zip
@@ -285,6 +287,9 @@ create_kernel_zip()
             echo -e "${txtred}No instructions to create out/target/product/${CMD}/kernel-cm-${CM_VERSION}-$(date +%Y%m%d)-${CMD}-signed.zip... skipping."
             echo -e "\r\n ${txtrst}"
         fi
+    else
+        echo -e "${txtred}Bootimage not found... skipping."
+        echo -e "\r\n ${txtrst}"
     fi
 }
 
@@ -353,9 +358,9 @@ if [ -f $CUR_DIR/env.sh ]; then
 fi
 
 # fix module copy for archlinux
-mkdir -p out/target/product/${CMD}/system/lib
-mkdir -p out/target/product/${CMD}/system/usr
-cd out/target/product/${CMD}/system/usr
+mkdir -p ${ANDROID_PRODUCT_OUT}/system/lib
+mkdir -p ${ANDROID_PRODUCT_OUT}/system/usr
+cd ${ANDROID_PRODUCT_OUT}/system/usr
 ln -sf ../lib .
 cd -
 
@@ -364,31 +369,31 @@ case "$EXTRACMD" in
 	kernel)
 		echo -e "${txtgrn}Rebuilding bootimage...${txtrst}"
 
-        rm -rf out/target/product/${CMD}/obj/KERNEL_OBJ
-        rm -rf out/target/product/${CMD}/kernel_zip
-        rm out/target/product/${CMD}/kernel
-        rm out/target/product/${CMD}/boot.img
-        rm -rf out/target/product/${CMD}/root
-        rm -rf out/target/product/${CMD}/ramdisk*
-        rm -rf out/target/product/${CMD}/combined*
+        rm -rf ${ANDROID_PRODUCT_OUT}/obj/KERNEL_OBJ
+        rm -rf ${ANDROID_PRODUCT_OUT}/kernel_zip
+        rm ${ANDROID_PRODUCT_OUT}/kernel
+        rm ${ANDROID_PRODUCT_OUT}/boot.img
+        rm -rf ${ANDROID_PRODUCT_OUT}/root
+        rm -rf ${ANDROID_PRODUCT_OUT}/ramdisk*
+        rm -rf ${ANDROID_PRODUCT_OUT}/combined*
 
         mka bootimage
         mka updater
-        if [ ! -e out/host/linux-x86/framework/signapk.jar ]; then
-            make -j${THREADS} signapk
+        if [ ! -e ${ANDROID_HOST_OUT}/framework/signapk.jar ]; then
+            mka signapk
         fi
         create_kernel_zip
 		;;
 	recovery)
 		echo -e "${txtgrn}Rebuilding recoveryimage...${txtrst}"
 
-        rm -rf out/target/product/${CMD}/obj/KERNEL_OBJ
-        rm out/target/product/${CMD}/kernel
-        rm out/target/product/${CMD}/recovery.img
-        rm out/target/product/${CMD}/recovery
-        rm -rf out/target/product/${CMD}/ramdisk*
+        rm -rf ${ANDROID_PRODUCT_OUT}/obj/KERNEL_OBJ
+        rm ${ANDROID_PRODUCT_OUT}/kernel
+        rm ${ANDROID_PRODUCT_OUT}/recovery.img
+        rm ${ANDROID_PRODUCT_OUT}/recovery
+        rm -rf ${ANDROID_PRODUCT_OUT}/ramdisk*
 
-        mka out/target/product/${CMD}/recovery.img
+        mka ${ANDROID_PRODUCT_OUT}/recovery.img
 		;;
 	*)
 		echo -e "${txtgrn}Building Android...${txtrst}"
