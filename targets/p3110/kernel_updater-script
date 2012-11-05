@@ -3,8 +3,9 @@ ui_print(">> CyanogenMod Bootimage Updater");
 ui_print(">>   for Samsung Galaxy Tab 2");
 ui_print(">>");
 
-assert(getprop("ro.product.device") == "p5110" || getprop("ro.build.product") == "p5110" || getprop("ro.product.board") == "p5110" || 
-       getprop("ro.product.device") == "GT-P5110" || getprop("ro.build.product") == "GT-P5110" || getprop("ro.product.board") == "GT-P5110");
+assert(getprop("ro.product.device") == "p3110" || getprop("ro.build.product") == "p3110" || getprop("ro.product.board") == "p3110" || 
+       getprop("ro.product.device") == "GT-P3110" || getprop("ro.build.product") == "GT-P3110" || getprop("ro.product.board") == "GT-P3110" ||
+       getprop("ro.product.device") == "espressowifi" || getprop("ro.build.product") == "espressowifi" || getprop("ro.product.board") == "espressowifi");
 
 show_progress(0.200000, 2);
 mount("ext4", "EMMC", "/dev/block/mmcblk0p9", "/system");

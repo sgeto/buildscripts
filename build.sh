@@ -1,9 +1,11 @@
 #!/bin/bash
 
-COMMAND="$1"
-ADDITIONAL="$2"
-TOP=${PWD}
-CURRENT_DIR=`dirname $0`
+CMD="$1"
+EXTRACMD="$2"
+A_TOP=${PWD}
+CUR_DIR=`dirname $0`
+DATE=$(date +%D)
+CM_VERSION=9
 
 # Common defines (Arch-dependent)
 case `uname -s` in
@@ -40,23 +42,21 @@ install_sun_jdk()
     apt-get install sun-java6-jdk
 }
 
-install_ubuntu_packages()
+install_arch_packages()
 {
     case $arch in
     "1")
         # i686
-        apt-get install git-core gnupg flex bison gperf build-essential \
-        zip curl zlib1g-dev libc6-dev libncurses5-dev x11proto-core-dev \
-        libx11-dev libreadline6-dev libgl1-mesa-dev tofrodos python-markdown \
-        libxml2-utils xsltproc
+        pacman -S openjdk6 perl git gnupg flex bison gperf zip unzip sdl wxgtk \
+        squashfs-tools ncurses libpng zlib libusb libusb-compat readline schedtool \
+        optipng python2 perl-switch
         ;;
     "2")
         # x86_64
-        apt-get install git-core gnupg flex bison gperf build-essential \
-        zip curl zlib1g-dev libc6-dev lib32ncurses5-dev ia32-libs \
-        x11proto-core-dev libx11-dev lib32readline5-dev lib32z-dev \
-        libgl1-mesa-dev g++-multilib mingw32 tofrodos python-markdown \
-        libxml2-utils xsltproc
+        pacman -S openjdk6 perl git gnupg flex bison gperf zip unzip sdl wxgtk \
+        squashfs-tools ncurses libpng zlib libusb libusb-compat readline schedtool \
+        optipng python2 perl-switch lib32-zlib lib32-ncurses lib32-readline \
+        gcc-libs-multilib gcc-multilib lib32-gcc-libs binutils-multilib libtool-multilib
         ;;
     *)
         # no arch
@@ -67,18 +67,23 @@ install_ubuntu_packages()
     esac
 }
 
-install_arch_packages()
+install_ubuntu_packages()
 {
     case $arch in
     "1")
         # i686
-        pacman -S openjdk6 perl git gnupg flex bison gperf zip unzip sdl wxgtk \
-        squashfs-tools ncurses libpng zlib libusb libusb-compat readline
+        apt-get install git-core gnupg flex bison gperf build-essential \
+        zip curl zlib1g-dev libc6-dev libncurses5-dev x11proto-core-dev \
+        libx11-dev libreadline6-dev libgl1-mesa-dev tofrodos python-markdown \
+        libxml2-utils xsltproc pngcrush
         ;;
     "2")
         # x86_64
-        pacman -S openjdk6 perl git gnupg flex bison gperf zip unzip sdl wxgtk \
-        squashfs-tools ncurses libpng zlib libusb libusb-compat readline gcc-multilib
+        apt-get install git-core gnupg flex bison gperf build-essential \
+        zip curl zlib1g-dev libc6-dev lib32ncurses5-dev ia32-libs \
+        x11proto-core-dev libx11-dev lib32readline5-dev lib32z-dev \
+        libgl1-mesa-dev g++-multilib mingw32 tofrodos python-markdown \
+        libxml2-utils xsltproc pngcrush
         ;;
     *)
         # no arch
@@ -98,6 +103,7 @@ prepare_environment()
     echo "4) Ubuntu 11.10"
     echo "5) Ubuntu 12.04"
     echo "6) Arch Linux"
+    echo "7) Debian"
     read -n1 distribution
     echo -e "\r\n"
     
@@ -142,7 +148,7 @@ prepare_environment()
         zip curl libc6-dev libncurses5-dev:i386 x11proto-core-dev \
         libx11-dev:i386 libreadline6-dev:i386 libgl1-mesa-dev:i386 \
         g++-multilib mingw32 openjdk-6-jdk tofrodos python-markdown \
-        libxml2-utils xsltproc zlib1g-dev:i386
+        libxml2-utils xsltproc zlib1g-dev:i386 pngcrush
         ;;
     
     "6")
@@ -151,6 +157,24 @@ prepare_environment()
         install_arch_packages
         mv /usr/bin/python /usr/bin/python.bak
         ln -s /usr/bin/python2 /usr/bin/python
+        ;;
+    "7")
+        # Debian
+        echo "Installing packages for Debian"
+        apt-get update
+        apt-get install git-core gnupg flex bison gperf build-essential \
+		zip curl libc6-dev lib32ncurses5 libncurses5-dev x11proto-core-dev \
+		libx11-dev libreadline6-dev lib32readline-gplv2-dev libgl1-mesa-glx \
+		libgl1-mesa-dev g++-multilib mingw32 openjdk-6-jdk tofrodos \
+		python-markdown libxml2-utils xsltproc zlib1g-dev pngcrush \
+		libcurl4-gnutls-dev comerr-dev krb5-multidev libcurl4-gnutls-dev \
+		libgcrypt11-dev libglib2.0-dev libgnutls-dev libgnutls-openssl27 \
+		libgnutlsxx27 libgpg-error-dev libgssrpc4 libgstreamer-plugins-base0.10-dev \
+		libgstreamer0.10-dev libidn11-dev libkadm5clnt-mit8 libkadm5srv-mit8 \
+		libkdb5-6 libkrb5-dev libldap2-dev libp11-kit-dev librtmp-dev libtasn1-3-dev \
+		libxml2-dev tofrodos python-markdown lib32z-dev ia32-libs
+		ln -s /usr/lib32/libX11.so.6 /usr/lib32/libX11.so
+		ln -s /usr/lib32/libGL.so.1 /usr/lib32/libGL.so
         ;;
         
     *)
@@ -170,6 +194,7 @@ prepare_environment()
         echo "Choose a branch:"
         echo "1) gingerbread"
         echo "2) ics"
+        echo "3) jellybean"
         read -n1 branch
         echo -e "\r\n"
 
@@ -181,6 +206,10 @@ prepare_environment()
             "2")
                 # ics
                 branch="ics"
+                ;;
+            "3")
+                # jellybean
+                branch="jellybean"
                 ;;
             *)
                 # no branch
@@ -220,14 +249,16 @@ prepare_environment()
 # create kernel zip after successfull build
 create_kernel_zip()
 {
-    if [ -e out/target/product/${COMMAND}/boot.img ]; then
-        if [ -e ${TOP}/buildscripts/samsung/${COMMAND}/kernel_updater-script ]; then
+    echo -e "${txtgrn}Creating kernel zip...${txtrst}"
+    if [ -e ${ANDROID_PRODUCT_OUT}/boot.img ]; then
+        echo -e "${txtgrn}Bootimage found...${txtrst}"
+        if [ -e ${A_TOP}/buildscripts/targets/${CMD}/kernel_updater-script ]; then
 
-            echo -e "${txtylw}Package KERNELUPDATE:${txtrst} out/target/product/${COMMAND}/kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip"
-            cd out/target/product/${COMMAND}
+            echo -e "${txtylw}Package KERNELUPDATE:${txtrst} out/target/product/${CMD}/kernel-cm-${CM_VERSION}-$(date +%Y%m%d)-${CMD}-signed.zip"
+            cd ${ANDROID_PRODUCT_OUT}
 
             rm -rf kernel_zip
-            rm kernel-cm-9-*
+            rm kernel-cm-${CM_VERSION}-*
 
             mkdir -p kernel_zip/system/lib/modules
             mkdir -p kernel_zip/META-INF/com/google/android
@@ -239,23 +270,26 @@ create_kernel_zip()
             echo "Copying update-binary..."
             cp obj/EXECUTABLES/updater_intermediates/updater kernel_zip/META-INF/com/google/android/update-binary
             echo "Copying updater-script..."
-            cat ${TOP}/buildscripts/samsung/${COMMAND}/kernel_updater-script > kernel_zip/META-INF/com/google/android/updater-script
+            cat ${A_TOP}/buildscripts/targets/${CMD}/kernel_updater-script > kernel_zip/META-INF/com/google/android/updater-script
                 
             echo "Zipping package..."
             cd kernel_zip
-            zip -qr ../kernel-cm-9-$(date +%Y%m%d)-${COMMAND}.zip ./
-            cd ${TOP}/out/target/product/${COMMAND}
+            zip -qr ../kernel-cm-${CM_VERSION}-$(date +%Y%m%d)-${CMD}.zip ./
+            cd ${ANDROID_PRODUCT_OUT}
 
             echo "Signing package..."
-            java -jar ${TOP}/out/host/linux-x86/framework/signapk.jar ${TOP}/build/target/product/security/testkey.x509.pem ${TOP}/build/target/product/security/testkey.pk8 kernel-cm-9-$(date +%Y%m%d)-${COMMAND}.zip kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip
-            rm kernel-cm-9-$(date +%Y%m%d)-${COMMAND}.zip
-            echo -e "${txtgrn}Package complete:${txtrst} out/target/product/${COMMAND}/kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip"
-            md5sum kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip
-            cd ${TOP}
+            java -jar ${ANDROID_HOST_OUT}/framework/signapk.jar ${A_TOP}/build/target/product/security/testkey.x509.pem ${A_TOP}/build/target/product/security/testkey.pk8 kernel-cm-${CM_VERSION}-$(date +%Y%m%d)-${CMD}.zip kernel-cm-${CM_VERSION}-$(date +%Y%m%d)-${CMD}-signed.zip
+            rm kernel-cm-${CM_VERSION}-$(date +%Y%m%d)-${CMD}.zip
+            echo -e "${txtgrn}Package complete:${txtrst} out/target/product/${CMD}/kernel-cm-${CM_VERSION}-$(date +%Y%m%d)-${CMD}-signed.zip"
+            md5sum kernel-cm-${CM_VERSION}-$(date +%Y%m%d)-${CMD}-signed.zip
+            cd ${A_TOP}
         else
-            echo -e "${txtred}No instructions to create out/target/product/${COMMAND}/kernel-cm-9-$(date +%Y%m%d)-${COMMAND}-signed.zip... skipping."
+            echo -e "${txtred}No instructions to create out/target/product/${CMD}/kernel-cm-${CM_VERSION}-$(date +%Y%m%d)-${CMD}-signed.zip... skipping."
             echo -e "\r\n ${txtrst}"
         fi
+    else
+        echo -e "${txtred}Bootimage not found... skipping."
+        echo -e "\r\n ${txtrst}"
     fi
 }
 
@@ -268,7 +302,7 @@ echo -e "${txtblu}          | |  |  __|   / /\ \ | |\/| |  __  | / /\ \| |    | 
 echo -e "${txtblu}          | |  | |____ / ____ \| |  | | |  | |/ ____ \ |____| . \ ____) | |__| | |\  | |__| |"
 echo -e "${txtblu}          |_|  |______/_/    \_\_|  |_|_|  |_/_/    \_\_____|_|\_\_____/ \____/|_| \_|\_____|"
 echo -e "${txtblu} \r\n"
-echo -e "${txtblu}                                    CyanogenMod 9 buildscript"
+echo -e "${txtblu}                                   CyanogenMod ${CM_VERSION} buildscript"
 echo -e "${txtblu}                             visit us @ http://www.teamhacksung.org"
 echo -e "${txtblu} \r\n"
 echo -e "${txtblu} ###################################################################################################"
@@ -278,7 +312,7 @@ echo -e "\r\n ${txtrst}"
 START=$(date +%s)
 
 # Device specific settings
-case "$COMMAND" in
+case "$CMD" in
     prepare)
         check_root
         prepare_environment
@@ -290,23 +324,27 @@ case "$COMMAND" in
 		exit
 		;;
 	*)
-		lunch=cm_${COMMAND}-userdebug
+		lunch=cm_${CMD}-userdebug
         brunch=${lunch}
 	    ;;
 esac
 
-if [ "$ADDITIONAL" != "kernel" ]; then
-    # Get prebuilts
-    echo -e "${txtylw}Downloading prebuilts...${txtrst}"
-    pushd vendor/cm
-    ./get-prebuilts
-    popd
+# Get prebuilts once per day
+if [ "$EXTRACMD" != "kernel" ]; then
+    prebuilts=$(cat prebuilts.log)
+    if [ "$DATE" != "$prebuilts" ]; then
+        echo -e "${txtylw}Downloading prebuilts...${txtrst}"
+        pushd vendor/cm
+        ./get-prebuilts
+        popd
+        echo $DATE > prebuilts.log
+    fi
 fi
 
 # Apply patches
-if [ -f $CURRENT_DIR/patch.sh ]; then
+if [ -f $CUR_DIR/patch.sh ]; then
     echo -e "${txtylw}Applying patches...${txtrst}"
-    source $CURRENT_DIR/patch.sh
+    source $CUR_DIR/patch.sh
 fi
 
 # Setting up Build Environment
@@ -314,30 +352,48 @@ echo -e "${txtgrn}Setting up Build Environment...${txtrst}"
 . build/envsetup.sh
 lunch ${lunch}
 
-export CROSS_COMPILE=${TOP}/prebuilt/linux-x86/toolchain/arm-eabi-4.4.3/bin/arm-eabi-
-
 # Allow setting of additional flags
-if [ -f $CURRENT_DIR/env.sh ]; then
-    source $CURRENT_DIR/env.sh
+if [ -f $CUR_DIR/env.sh ]; then
+    source $CUR_DIR/env.sh
 fi
 
+# fix module copy for archlinux
+mkdir -p ${ANDROID_PRODUCT_OUT}/system/lib
+mkdir -p ${ANDROID_PRODUCT_OUT}/system/usr
+cd ${ANDROID_PRODUCT_OUT}/system/usr
+ln -sf ../lib .
+cd -
+
 # Start the Build
-case "$ADDITIONAL" in
+case "$EXTRACMD" in
 	kernel)
 		echo -e "${txtgrn}Rebuilding bootimage...${txtrst}"
 
-        rm -rf out/target/product/${COMMAND}/obj/KERNEL_OBJ
-        rm out/target/product/${COMMAND}/kernel
-        rm out/target/product/${COMMAND}/boot.img
-        rm out/target/product/${COMMAND}/root
-        rm -rf out/target/product/${COMMAND}/ramdisk*
+        rm -rf ${ANDROID_PRODUCT_OUT}/obj/KERNEL_OBJ
+        rm -rf ${ANDROID_PRODUCT_OUT}/kernel_zip
+        rm ${ANDROID_PRODUCT_OUT}/kernel
+        rm ${ANDROID_PRODUCT_OUT}/boot.img
+        rm -rf ${ANDROID_PRODUCT_OUT}/root
+        rm -rf ${ANDROID_PRODUCT_OUT}/ramdisk*
+        rm -rf ${ANDROID_PRODUCT_OUT}/combined*
 
-        make -j${THREADS} out/target/product/${COMMAND}/boot.img
-        make -j${THREADS} updater
-        if [ ! -e out/host/linux-x86/framework/signapk.jar ]; then
-            make -j${THREADS} signapk
+        mka bootimage
+        mka updater
+        if [ ! -e ${ANDROID_HOST_OUT}/framework/signapk.jar ]; then
+            mka signapk
         fi
         create_kernel_zip
+		;;
+	recovery)
+		echo -e "${txtgrn}Rebuilding recoveryimage...${txtrst}"
+
+        rm -rf ${ANDROID_PRODUCT_OUT}/obj/KERNEL_OBJ
+        rm ${ANDROID_PRODUCT_OUT}/kernel
+        rm ${ANDROID_PRODUCT_OUT}/recovery.img
+        rm ${ANDROID_PRODUCT_OUT}/recovery
+        rm -rf ${ANDROID_PRODUCT_OUT}/ramdisk*
+
+        mka ${ANDROID_PRODUCT_OUT}/recovery.img
 		;;
 	*)
 		echo -e "${txtgrn}Building Android...${txtrst}"
