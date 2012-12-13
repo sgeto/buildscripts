@@ -5,7 +5,7 @@ EXTRACMD="$2"
 A_TOP=${PWD}
 CUR_DIR=`dirname $0`
 DATE=$(date +%D)
-CM_VERSION=10
+CM_VERSION=10.1
 
 # Common defines (Arch-dependent)
 case `uname -s` in
@@ -195,6 +195,7 @@ prepare_environment()
         echo "1) gingerbread"
         echo "2) ics"
         echo "3) jellybean"
+        echo "1) cm-10.1"
         read -n1 branch
         echo -e "\r\n"
 
@@ -210,6 +211,10 @@ prepare_environment()
             "3")
                 # jellybean
                 branch="jellybean"
+                ;;
+            "4")
+                # cm-10.1
+                branch="cm-10.1"
                 ;;
             *)
                 # no branch
