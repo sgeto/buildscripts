@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest>
+  <project name="teamhacksung/buildscripts" path="buildscripts" remote="github">
+    <copyfile dest="build.sh" src="build.sh" />
+  </project>
+</manifest>
