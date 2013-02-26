@@ -210,7 +210,8 @@ prepare_environment()
         mkdir -p $working_directory
         cd $working_directory
         repo init -u git://github.com/CyanogenMod/android.git -b $branch
-        mkdir -p .repo/local_manifests
+        mkdir -p $working_directory/.repo/local_manifests
+        touch $working_directory/.repo/local_manifests/my_manifest.xml
         curl https://raw.github.com/teamhacksung/buildscripts/$branch/my_manifest.xml > $working_directory/.repo/local_manifests/my_manifest.xml
         repo sync -j15
         echo "Sources synced to $working_directory"        
