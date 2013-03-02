@@ -205,7 +205,9 @@ prepare_environment()
         mkdir ~/bin
         export PATH=~/bin:$PATH
         curl https://dl-ssl.google.com/dl/googlesource/git-repo/repo > ~/bin/repo
-        chmod a+x ~/bin/repo        
+        chmod a+x ~/bin/repo
+        source ~/.profile
+        repo selfupdate
         
         mkdir -p $working_directory
         cd $working_directory
