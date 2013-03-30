@@ -60,7 +60,7 @@ install_sun_jdk()
 install_arch_packages()
 {
     # x86_64
-    pacman -S jdk7-openjdk jre7-openjdk jre7-openjdk-headless perl git gnupg flex bison gperf zip unzip sdl wxgtk \
+    pacman -S jdk7-openjdk jre7-openjdk jre7-openjdk-headless perl git gnupg flex bison gperf zip unzip lzop sdl wxgtk \
     squashfs-tools ncurses libpng zlib libusb libusb-compat readline schedtool \
     optipng python2 perl-switch lib32-zlib lib32-ncurses lib32-readline \
     gcc-libs-multilib gcc-multilib lib32-gcc-libs binutils-multilib libtool-multilib
