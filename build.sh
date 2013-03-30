@@ -214,7 +214,7 @@ prepare_environment()
         repo init -u git://github.com/CyanogenMod/android.git -b $branch
         mkdir -p $working_directory/.repo/local_manifests
         touch $working_directory/.repo/local_manifests/my_manifest.xml
-        curl https://raw.github.com/teamhacksung/buildscripts/$branch/my_manifest.xml > $working_directory/.repo/local_manifests/my_manifest.xml
+        curl https://raw.github.com/codeworkx/buildscripts/$branch/my_manifest.xml > $working_directory/.repo/local_manifests/my_manifest.xml
         repo sync -j15
         echo "Sources synced to $working_directory"        
         exit
@@ -273,19 +273,29 @@ create_kernel_zip()
     fi
 }
 
-echo -e "${txtblu} ###################################################################################################"
+echo -e "${txtblu} #####################################################################"
+echo -e "${txtblu} \r\n"                                                   
+echo -e "${txtblu}                CCCCCCCCCCCCC MMMMMMMM               MMMMMMMM "
+echo -e "${txtblu}             CCC::::::::::::C M:::::::M             M:::::::M "
+echo -e "${txtblu}           CC:::::::::::::::C M::::::::M           M::::::::M "
+echo -e "${txtblu}          C:::::CCCCCCCC::::C M:::::::::M         M:::::::::M "
+echo -e "${txtblu}         C:::::C       CCCCCC M::::::::::M       M::::::::::M "
+echo -e "${txtblu}        C:::::C               M:::::::::::M     M:::::::::::M "
+echo -e "${txtblu}        C:::::C               M:::::::M::::M   M::::M:::::::M "
+echo -e "${txtblu}        C:::::C               M::::::M M::::M M::::M M::::::M "
+echo -e "${txtblu}        C:::::C               M::::::M  M::::M::::M  M::::::M "
+echo -e "${txtblu}        C:::::C               M::::::M   M:::::::M   M::::::M "
+echo -e "${txtblu}        C:::::C               M::::::M    M:::::M    M::::::M "
+echo -e "${txtblu}         C:::::C       CCCCCC M::::::M     MMMMM     M::::::M "
+echo -e "${txtblu}          C:::::CCCCCCCC::::C M::::::M               M::::::M "
+echo -e "${txtblu}           CC:::::::::::::::C M::::::M               M::::::M "
+echo -e "${txtblu}             CCC::::::::::::C M::::::M               M::::::M "
+echo -e "${txtblu}                CCCCCCCCCCCCC MMMMMMMM               MMMMMMMM "
 echo -e "${txtblu} \r\n"
-echo -e "${txtblu}        _______ ______          __  __ _    _          _____ _  __ _____ _    _ _   _  _____ "
-echo -e "${txtblu}       |__   __|  ____|   /\   |  \/  | |  | |   /\   / ____| |/ // ____| |  | | \ | |/ ____|"
-echo -e "${txtblu}          | |  | |__     /  \  | \  / | |__| |  /  \ | |    | ' /| (___ | |  | |  \| | |  __ "
-echo -e "${txtblu}          | |  |  __|   / /\ \ | |\/| |  __  | / /\ \| |    |  <  \___ \| |  | | . ' | | |_ |"
-echo -e "${txtblu}          | |  | |____ / ____ \| |  | | |  | |/ ____ \ |____| . \ ____) | |__| | |\  | |__| |"
-echo -e "${txtblu}          |_|  |______/_/    \_\_|  |_|_|  |_/_/    \_\_____|_|\_\_____/ \____/|_| \_|\_____|"
+echo -e "${txtblu}                     CyanogenMod ${CM_VERSION} buildscript"
+echo -e "${txtblu}                visit us @ http://www.cyanogenmod.org"
 echo -e "${txtblu} \r\n"
-echo -e "${txtblu}                                   CyanogenMod ${CM_VERSION} buildscript"
-echo -e "${txtblu}                             visit us @ http://www.teamhacksung.org"
-echo -e "${txtblu} \r\n"
-echo -e "${txtblu} ###################################################################################################"
+echo -e "${txtblu} #####################################################################"
 echo -e "\r\n ${txtrst}"
 
 # Check for build target
