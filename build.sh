@@ -347,6 +347,7 @@ fi
 if [ -f $CUR_DIR/patch.sh ]; then
     echo -e "${txtylw}Applying patches...${txtrst}"
     source $CUR_DIR/patch.sh
+    echo -e "${txtgrn}Patches applied!${txtrst}"
 fi
 
 # Setting up Build Environment
