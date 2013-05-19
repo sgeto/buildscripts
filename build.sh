@@ -372,7 +372,6 @@ case "$EXTRACMD" in
     kernel)
         echo -e "${txtgrn}Rebuilding bootimage...${txtrst}"
 
-        rm -rf ${ANDROID_PRODUCT_OUT}/obj/KERNEL_OBJ
         rm -rf ${ANDROID_PRODUCT_OUT}/kernel_zip
         rm ${ANDROID_PRODUCT_OUT}/kernel
         rm ${ANDROID_PRODUCT_OUT}/boot.img
@@ -381,7 +380,9 @@ case "$EXTRACMD" in
         rm -rf ${ANDROID_PRODUCT_OUT}/combined*
 
         mka bootimage
-        mka updater
+        if [ ! -e ${ANDROID_PRODUCT_OUT}/obj/EXECUTABLES/updater_intermediates/updater ]; then
+        	mka updater
+        fi
         if [ ! -e ${ANDROID_HOST_OUT}/framework/signapk.jar ]; then
             mka signapk
         fi
