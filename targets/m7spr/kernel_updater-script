@@ -1,9 +1,10 @@
 ui_print(">>");
 ui_print(">> CyanogenMod Bootimage Updater");
-ui_print(">>      for HTC One (m7wls)");
+ui_print(">>      for HTC One (m7spr)");
 ui_print(">>");
 
-assert(getprop("ro.product.device") == "m7wls" || getprop("ro.build.product") == "m7wls" || getprop("ro.product.board") == "m7wls");
+assert(getprop("ro.product.device") == "m7spr" || getprop("ro.build.product") == "m7spr" || getprop("ro.product.board") == "m7spr" ||
+       getprop("ro.product.device") == "m7wls" || getprop("ro.build.product") == "m7wls" || getprop("ro.product.board") == "m7wls");
 
 show_progress(0.200000, 2);
 mount("ext4", "EMMC", "/dev/block/mmcblk0p37", "/system");
