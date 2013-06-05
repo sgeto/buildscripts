@@ -351,7 +351,7 @@ if [ -f $CUR_DIR/patches.txt ]; then
         GERRIT_CHANGES+="$line "    
     done < patches.txt
 
-    python $CUR_DIR/buildscripts/repopick.py $GERRIT_CHANGES --ignore-missing --start-branch auto --abandon-first
+    python $CUR_DIR/build/tools/repopick.py $GERRIT_CHANGES --ignore-missing --start-branch auto --abandon-first
     echo -e "${txtgrn}Patches applied!${txtrst}"
 fi
 
