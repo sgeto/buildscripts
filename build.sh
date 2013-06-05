@@ -345,14 +345,15 @@ fi
 
 # Apply gerrit changes from patches.txt. One change-id per line!
 if [ -f $CUR_DIR/patches.txt ]; then
-    echo -e "${txtylw}Applying patches...${txtrst}"
-
     while read line; do    
         GERRIT_CHANGES+="$line "    
     done < patches.txt
 
-    python $CUR_DIR/build/tools/repopick.py $GERRIT_CHANGES --ignore-missing --start-branch auto --abandon-first
-    echo -e "${txtgrn}Patches applied!${txtrst}"
+    if [ $GERRIT_CHANGES ]; then
+        echo -e "${txtylw}Applying patches...${txtrst}"
+        python $CUR_DIR/build/tools/repopick.py $GERRIT_CHANGES --ignore-missing --start-branch auto --abandon-first
+        echo -e "${txtgrn}Patches applied!${txtrst}"
+    fi
 fi
 
 # Setting up Build Environment
