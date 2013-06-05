@@ -343,10 +343,15 @@ if [ "$EXTRACMD" != "kernel" ]; then
     fi
 fi
 
-# Apply patches
-if [ -f $CUR_DIR/patch.sh ]; then
+# Apply gerrit changes from patches.txt. One change-id per line!
+if [ -f $CUR_DIR/patches.txt ]; then
     echo -e "${txtylw}Applying patches...${txtrst}"
-    source $CUR_DIR/patch.sh
+
+    while read line; do    
+        GERRIT_CHANGES+="$line "    
+    done < patches.txt
+
+    python $CUR_DIR/buildscripts/repopick.py $GERRIT_CHANGES --ignore-missing --start-branch auto --abandon-first
     echo -e "${txtgrn}Patches applied!${txtrst}"
 fi
 
