@@ -301,9 +301,10 @@ echo -e "\r\n ${txtrst}"
 # Check for build target
 if [ -z "${CMD}" ]; then
 	echo -e "${txtred}No build target set."
-	echo -e "${txtred}Usage: ./build.sh i9300 (complete build)"
-	echo -e "${txtred}       ./build.sh i9300 kernel (bootimage only)"
-	echo -e "${txtred}       ./build.sh clean"
+	echo -e "${txtred}Usage: ./build.sh mako (complete build)"
+	echo -e "${txtred}       ./build.sh mako kernel (bootimage only)"
+	echo -e "${txtred}       ./build.sh clean (make clean)"
+    echo -e "${txtred}       ./build.sh clobber (make clober, wipes entire out/ directory)"
     echo -e "${txtred}       ./build.sh prepare (prepares the build environment)"
     echo -e "\r\n ${txtrst}"
     exit

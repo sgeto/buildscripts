@@ -1,0 +1,31 @@
+CyanogenMod buildscripts
+========================
+
+How to use
+----------
+create .repo/local_manifests/buildscripts.xml with following content:
+```xml
+    <?xml version="1.0" encoding="UTF-8"?>
+    <manifest>
+        <project name="codeworkx/buildscripts" path="buildscripts" remote="github">
+            <copyfile dest="build.sh" src="build.sh" />
+        </project>
+    </manifest>
+```
+$ repo sync
+
+### Additional files
+env.sh - Get's included from build.sh, usefull for running additional commands
+
+patches.txt - Let's you auto-apply gerrit patches, one gerrit patch-id per line
+
+Commands
+--------
+
+    ./build.sh mako (full build)
+    ./build.sh mako kernel (bootimage only)
+    ./build.sh clean (make clean)
+    ./build.sh clobber (make clober, wipes entire out/ directory)
+    ./build.sh prepare (prepares the build environment)
+
+
