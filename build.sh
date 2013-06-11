@@ -331,6 +331,16 @@ case "$CMD" in
         ;;
 esac
 
+# create env.sh if it doesn't exist
+if [ ! -f $CUR_DIR/env.sh ]; then
+    echo "export USE_CCACHE=1" > env.sh
+fi
+
+# create empty patches.txt if it doesn't exist
+if [ ! -f $CUR_DIR/patches.txt ]; then
+    touch patches.txt
+fi
+
 # Get prebuilts once per day
 if [ "$EXTRACMD" != "kernel" ]; then
     prebuilts=$(cat prebuilts.log)
