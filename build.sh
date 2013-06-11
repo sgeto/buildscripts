@@ -325,6 +325,10 @@ case "$CMD" in
         rm -rf ./out/target/product
         exit
         ;;
+    clobber)
+        make clobber
+        exit
+        ;;
     *)
         lunch=cm_${CMD}-userdebug
         brunch=${lunch}
