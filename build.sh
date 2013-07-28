@@ -439,3 +439,8 @@ E_SEC=$((ELAPSED - E_MIN * 60))
 printf "${txtgrn}Elapsed: "
 [ $E_MIN != 0 ] && printf "%d min(s) " $E_MIN
 printf "%d sec(s)\n ${txtrst}" $E_SEC
+
+# Postbuild script for uploading builds
+if [ -f $CUR_DIR/postbuild.sh ]; then
+    source $CUR_DIR/postbuild.sh
+fi
