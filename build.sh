@@ -6,7 +6,7 @@ A_TOP=${PWD}
 CUR_DIR=`dirname $0`
 DATE=$(date +%D)
 MACHINE_TYPE=`uname -m`
-CM_VERSION=11.0
+CM_VERSION=12.0
 
 # Common defines (Arch-dependent)
 case `uname -s` in
@@ -167,6 +167,8 @@ prepare_environment()
         echo "3) cm-10 (jellybean mr0)"
         echo "4) cm-10.1 (jellybean mr1)"
         echo "5) cm-10.2 (jellybean mr2)"
+        echo "6) cm-11.0 (kitkat)"
+        echo "7) cm-12.0 (lollipop)"
         read -n1 branch
         echo -e "\r\n"
 
@@ -194,6 +196,10 @@ prepare_environment()
             "6")
                 # cm-11.0
                 branch="cm-11.0"
+                ;;
+            "7")
+                # cm-12.0
+                branch="cm-12.0"
                 ;;
             *)
                 # no branch
