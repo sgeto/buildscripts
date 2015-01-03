@@ -361,18 +361,6 @@ if [ ! -f $CUR_DIR/patches.txt ]; then
     touch patches.txt
 fi
 
-# Get prebuilts once per day
-if [ "$EXTRACMD" != "kernel" ]; then
-    prebuilts=$(cat prebuilts.log)
-    if [ "$DATE" != "$prebuilts" ]; then
-        echo -e "${txtylw}Downloading prebuilts...${txtrst}"
-        pushd vendor/cm
-        ./get-prebuilts
-        popd
-        echo $DATE > prebuilts.log
-    fi
-fi
-
 # Apply gerrit changes from patches.txt. One change-id per line!
 if [ -f $CUR_DIR/patches.txt ]; then
     while read line; do    
