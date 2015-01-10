@@ -346,7 +346,7 @@ case "$CMD" in
         exit
         ;;
     *)
-        lunch=cm_${CMD}-userdebug
+        lunch=cm_${CMD}-eng
         brunch=${lunch}
         ;;
 esac
