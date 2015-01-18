@@ -361,19 +361,6 @@ if [ ! -f $CUR_DIR/patches.txt ]; then
     touch patches.txt
 fi
 
-# Apply gerrit changes from patches.txt. One change-id per line!
-if [ -f $CUR_DIR/patches.txt ]; then
-    while read line; do    
-        GERRIT_CHANGES+="$line "    
-    done < patches.txt
-
-    if [[ ! -z ${GERRIT_CHANGES} && ! ${GERRIT_CHANGES} == " " ]]; then
-        echo -e "${txtylw}Applying patches...${txtrst}"
-        python $CUR_DIR/build/tools/repopick.py $GERRIT_CHANGES --ignore-missing --start-branch auto --abandon-first
-        echo -e "${txtgrn}Patches applied!${txtrst}"
-    fi
-fi
-
 # Setting up Build Environment
 echo -e "${txtgrn}Setting up Build Environment...${txtrst}"
 . build/envsetup.sh
@@ -390,6 +377,19 @@ mkdir -p ${ANDROID_PRODUCT_OUT}/system/usr
 cd ${ANDROID_PRODUCT_OUT}/system/usr
 ln -sf ../lib .
 cd -
+
+# Apply gerrit changes from patches.txt. One change-id per line!
+if [ -f $CUR_DIR/patches.txt ]; then
+    while read line; do    
+        GERRIT_CHANGES+="$line "    
+    done < patches.txt
+
+    if [[ ! -z ${GERRIT_CHANGES} && ! ${GERRIT_CHANGES} == " " ]]; then
+        echo -e "${txtylw}Applying patches...${txtrst}"
+        python $CUR_DIR/build/tools/repopick.py $GERRIT_CHANGES --ignore-missing --start-branch auto --abandon-first
+        echo -e "${txtgrn}Patches applied!${txtrst}"
+    fi
+fi
 
 # Start the Build
 case "$EXTRACMD" in
