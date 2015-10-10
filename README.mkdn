@@ -6,7 +6,7 @@ Starting from zero:
     mkdir -p ~/android/system
     cd ~/android
     touch ~/android/build.sh
-    curl https://raw.github.com/codeworkx/buildscripts/cm-12.1/build.sh > ~/android/build.sh
+    curl https://raw.github.com/codeworkx/buildscripts/cm-13.0/build.sh > ~/android/build.sh
     Run "./build.sh prepare" as root
 
 If you've already synced CM-Sources:

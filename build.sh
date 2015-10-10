@@ -6,7 +6,7 @@ A_TOP=${PWD}
 CUR_DIR=`dirname $0`
 DATE=$(date +%D)
 MACHINE_TYPE=`uname -m`
-CM_VERSION=12.1
+CM_VERSION=13.0
 
 # Common defines (Arch-dependent)
 case `uname -s` in
@@ -170,6 +170,7 @@ prepare_environment()
         echo "6) cm-11.0 (kitkat)"
         echo "7) cm-12.0 (lollipop)"
         echo "8) cm-12.1 (lollipop)"
+        echo "9) cm-13.0 (marshmallow)"
         read -n1 branch
         echo -e "\r\n"
 
@@ -205,6 +206,10 @@ prepare_environment()
             "8")
                 # cm-12.1
                 branch="cm-12.1"
+                ;;
+            "9")
+                # cm-13.0
+                branch="cm-13.0"
                 ;;
             *)
                 # no branch
@@ -370,7 +375,10 @@ esac
 
 # create env.sh if it doesn't exist
 if [ ! -f $CUR_DIR/env.sh ]; then
+    # Enable ccache
     echo "export USE_CCACHE=1" > env.sh
+    # Fix for Archlinux
+    echo "export LC_ALL=C" > env.sh
 fi
 
 # create empty patches.txt if it doesn't exist
