@@ -371,6 +371,8 @@ esac
 # create env.sh if it doesn't exist
 if [ ! -f $CUR_DIR/env.sh ]; then
     echo "export USE_CCACHE=1" > env.sh
+    # Fix for Archlinux
+    echo "export LC_ALL=C" > env.sh
 fi
 
 # create empty patches.txt if it doesn't exist
