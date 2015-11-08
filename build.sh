@@ -403,16 +403,40 @@ cd ${ANDROID_PRODUCT_OUT}/system/usr
 ln -sf ../lib .
 cd -
 
-# Apply gerrit changes from patches.txt. One change-id per line!
+# Apply changes from patches.txt.
+# 	Gerrit: one change-id per line
+# 	Local: local vendor/cm 0001-disable-security.patch
 if [ -f $CUR_DIR/patches.txt ]; then
-    while read line; do    
-        GERRIT_CHANGES+="$line "    
+    declare -a LOCAL_CHANGES
+
+	# Read patch data
+    while read line; do
+        if [[ $line == local* ]]; then
+            IFS=' ' read -a patchdata <<< "$line"
+            LOCAL_CHANGES=("${LOCAL_CHANGES[@]}" "${patchdata[1]} ${patchdata[2]}")
+        else
+            GERRIT_CHANGES+="$line "  
+        fi  
     done < patches.txt
 
+	# Apply gerrit changes
     if [[ ! -z ${GERRIT_CHANGES} && ! ${GERRIT_CHANGES} == " " ]]; then
-        echo -e "${txtylw}Applying patches...${txtrst}"
+        echo -e "${txtylw}Applying gerrit patches...${txtrst}"
         python $CUR_DIR/build/tools/repopick.py $GERRIT_CHANGES --ignore-missing --start-branch auto --abandon-first
-        echo -e "${txtgrn}Patches applied!${txtrst}"
+        echo -e "${txtgrn}Patches from gerrit applied!${txtrst}"
+    fi
+
+    # Apply local changes
+    if [[ ! -z ${LOCAL_CHANGES} && ! ${LOCAL_CHANGES} == " " ]]; then
+        echo -e "${txtylw}Applying local patches...${txtrst}"
+        for line in "${LOCAL_CHANGES[@]}"
+        do
+            IFS=' ' read -a patchdata <<< "$line"
+            echo -e "${txtblu}Patch: ${patchdata[1]} ${txtrst}"
+            echo -e "${txtblu}Target: ${patchdata[0]} ${txtrst}"
+            git apply --directory=${patchdata[0]} ${patchdata[1]}
+        done
+        echo -e "${txtgrn}Patches from local applied!${txtrst}"
     fi
 fi
 
