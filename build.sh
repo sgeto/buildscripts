@@ -6,7 +6,7 @@ A_TOP=${PWD}
 CUR_DIR=`dirname $0`
 DATE=$(date +%D)
 MACHINE_TYPE=`uname -m`
-CM_VERSION=13.0
+CM_VERSION=14.0
 
 # Common defines (Arch-dependent)
 case `uname -s` in
@@ -210,6 +210,10 @@ prepare_environment()
             "9")
                 # cm-13.0
                 branch="cm-13.0"
+                ;;
+            "10")
+                # cm-14.0
+                branch="cm-14.0"
                 ;;
             *)
                 # no branch
