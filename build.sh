@@ -6,7 +6,7 @@ A_TOP=${PWD}
 CUR_DIR=`dirname $0`
 DATE=$(date +%D)
 MACHINE_TYPE=`uname -m`
-CM_VERSION=14.0
+CM_VERSION=14.1
 
 # Common defines (Arch-dependent)
 case `uname -s` in
@@ -171,6 +171,8 @@ prepare_environment()
         echo "7) cm-12.0 (lollipop)"
         echo "8) cm-12.1 (lollipop)"
         echo "9) cm-13.0 (marshmallow)"
+        echo "10) cm-14.0 (nougat)"
+        echo "11) cm-14.1 (nougat)"
         read -n1 branch
         echo -e "\r\n"
 
@@ -214,6 +216,10 @@ prepare_environment()
             "10")
                 # cm-14.0
                 branch="cm-14.0"
+                ;;
+            "11")
+                # cm-14.1
+                branch="cm-14.1"
                 ;;
             *)
                 # no branch
