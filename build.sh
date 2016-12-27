@@ -6,7 +6,7 @@ A_TOP=${PWD}
 CUR_DIR=`dirname $0`
 DATE=$(date +%D)
 MACHINE_TYPE=`uname -m`
-CM_VERSION=14.1
+LAOS_VERSION=14.1
 
 # Common defines (Arch-dependent)
 case `uname -s` in
@@ -246,7 +246,7 @@ prepare_environment()
         
         mkdir -p $working_directory
         cd $working_directory
-        repo init -u git://github.com/CyanogenMod/android.git -b $branch
+        repo init -u git://github.com/LineageOS/android.git -b $branch
         mkdir -p $working_directory/.repo/local_manifests
         touch $working_directory/.repo/local_manifests/my_manifest.xml
         curl https://raw.github.com/codeworkx/buildscripts/$branch/my_manifest.xml > $working_directory/.repo/local_manifests/my_manifest.xml
@@ -269,11 +269,11 @@ create_kernel_zip()
         echo -e "${txtgrn}Bootimage found...${txtrst}"
         if [ -e ${A_TOP}/buildscripts/targets/${CMD}/kernel_updater-script ]; then
 
-            echo -e "${txtylw}Package KERNELUPDATE:${txtrst} out/target/product/${CMD}/kernel-cm-${CM_VERSION}-$(date +%Y%m%d)-${CMD}-signed.zip"
+            echo -e "${txtylw}Package KERNELUPDATE:${txtrst} out/target/product/${CMD}/kernel-laos-${LAOS_VERSION}-$(date +%Y%m%d)-${CMD}-signed.zip"
             cd ${ANDROID_PRODUCT_OUT}
 
             rm -rf kernel_zip
-            rm kernel-cm-${CM_VERSION}-*
+            rm kernel-laos-${LAOS_VERSION}-*
 
             mkdir -p kernel_zip/system/lib/modules
             mkdir -p kernel_zip/META-INF/com/google/android
@@ -289,17 +289,17 @@ create_kernel_zip()
                 
             echo "Zipping package..."
             cd kernel_zip
-            zip -qr ../kernel-cm-${CM_VERSION}-$(date +%Y%m%d)-${CMD}.zip ./
+            zip -qr ../kernel-laos-${LAOS_VERSION}-$(date +%Y%m%d)-${CMD}.zip ./
             cd ${ANDROID_PRODUCT_OUT}
 
             echo "Signing package..."
-            java -jar ${ANDROID_HOST_OUT}/framework/signapk.jar ${A_TOP}/build/target/product/security/testkey.x509.pem ${A_TOP}/build/target/product/security/testkey.pk8 kernel-cm-${CM_VERSION}-$(date +%Y%m%d)-${CMD}.zip kernel-cm-${CM_VERSION}-$(date +%Y%m%d)-${CMD}-signed.zip
-            rm kernel-cm-${CM_VERSION}-$(date +%Y%m%d)-${CMD}.zip
-            echo -e "${txtgrn}Package complete:${txtrst} out/target/product/${CMD}/kernel-cm-${CM_VERSION}-$(date +%Y%m%d)-${CMD}-signed.zip"
-            md5sum kernel-cm-${CM_VERSION}-$(date +%Y%m%d)-${CMD}-signed.zip
+            java -jar ${ANDROID_HOST_OUT}/framework/signapk.jar ${A_TOP}/build/target/product/security/testkey.x509.pem ${A_TOP}/build/target/product/security/testkey.pk8 kernel-laos-${LAOS_VERSION}-$(date +%Y%m%d)-${CMD}.zip kernel-laos-${LAOS_VERSION}-$(date +%Y%m%d)-${CMD}-signed.zip
+            rm kernel-laos-${LAOS_VERSION}-$(date +%Y%m%d)-${CMD}.zip
+            echo -e "${txtgrn}Package complete:${txtrst} out/target/product/${CMD}/kernel-laos-${LAOS_VERSION}-$(date +%Y%m%d)-${CMD}-signed.zip"
+            md5sum kernel-laos-${LAOS_VERSION}-$(date +%Y%m%d)-${CMD}-signed.zip
             cd ${A_TOP}
         else
-            echo -e "${txtred}No instructions to create out/target/product/${CMD}/kernel-cm-${CM_VERSION}-$(date +%Y%m%d)-${CMD}-signed.zip... skipping."
+            echo -e "${txtred}No instructions to create out/target/product/${CMD}/kernel-laos-${LAOS_VERSION}-$(date +%Y%m%d)-${CMD}-signed.zip... skipping."
             echo -e "\r\n ${txtrst}"
         fi
     else
@@ -308,29 +308,20 @@ create_kernel_zip()
     fi
 }
 
-echo -e "${txtblu} #####################################################################"
-echo -e "${txtblu} \r\n"                                                   
-echo -e "${txtblu}                CCCCCCCCCCCCC MMMMMMMM               MMMMMMMM "
-echo -e "${txtblu}             CCC::::::::::::C M:::::::M             M:::::::M "
-echo -e "${txtblu}           CC:::::::::::::::C M::::::::M           M::::::::M "
-echo -e "${txtblu}          C:::::CCCCCCCC::::C M:::::::::M         M:::::::::M "
-echo -e "${txtblu}         C:::::C       CCCCCC M::::::::::M       M::::::::::M "
-echo -e "${txtblu}        C:::::C               M:::::::::::M     M:::::::::::M "
-echo -e "${txtblu}        C:::::C               M:::::::M::::M   M::::M:::::::M "
-echo -e "${txtblu}        C:::::C               M::::::M M::::M M::::M M::::::M "
-echo -e "${txtblu}        C:::::C               M::::::M  M::::M::::M  M::::::M "
-echo -e "${txtblu}        C:::::C               M::::::M   M:::::::M   M::::::M "
-echo -e "${txtblu}        C:::::C               M::::::M    M:::::M    M::::::M "
-echo -e "${txtblu}         C:::::C       CCCCCC M::::::M     MMMMM     M::::::M "
-echo -e "${txtblu}          C:::::CCCCCCCC::::C M::::::M               M::::::M "
-echo -e "${txtblu}           CC:::::::::::::::C M::::::M               M::::::M "
-echo -e "${txtblu}             CCC::::::::::::C M::::::M               M::::::M "
-echo -e "${txtblu}                CCCCCCCCCCCCC MMMMMMMM               MMMMMMMM "
+
+echo -e "${txtblu} #################################################"
 echo -e "${txtblu} \r\n"
-echo -e "${txtblu}                     CyanogenMod ${CM_VERSION} buildscript"
-echo -e "${txtblu}                visit us @ http://www.cyanogenmod.org"
+echo -e "${txtblu}         ██╗      █████╗  ██████╗ ███████╗ "
+echo -e "${txtblu}         ██║     ██╔══██╗██╔═══██╗██╔════╝ "
+echo -e "${txtblu}         ██║     ███████║██║   ██║███████╗ "
+echo -e "${txtblu}         ██║     ██╔══██║██║   ██║╚════██║ "
+echo -e "${txtblu}         ███████╗██║  ██║╚██████╔╝███████║ "
+echo -e "${txtblu}         ╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚══════╝ "
 echo -e "${txtblu} \r\n"
-echo -e "${txtblu} #####################################################################"
+echo -e "${txtblu}  Lineage Android OS ${LAOS_VERSION} buildscript"
+echo -e "${txtblu}      visit us @ http://www.lineageos.org"
+echo -e "${txtblu} \r\n"
+echo -e "${txtblu} #################################################"
 echo -e "\r\n ${txtrst}"
 
 # Check for build target
