@@ -369,7 +369,7 @@ case "$CMD" in
         exit
         ;;
     *)
-        lunch=cm_${CMD}-${BUILD_TYPE}
+        lunch=lineage_${CMD}-${BUILD_TYPE}
         brunch=${lunch}
         ;;
 esac
