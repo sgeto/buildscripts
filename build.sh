@@ -399,17 +399,19 @@ cd -
 if [ -f $CUR_DIR/patches.txt ]; then
     declare -a LOCAL_CHANGES
 
-	# Read patch data
+    gerrit_re='^[0-9]+$'
+
+    # Read patch data
     while read line; do
         if [[ $line == local* ]]; then
             IFS=' ' read -a patchdata <<< "$line"
             LOCAL_CHANGES=("${LOCAL_CHANGES[@]}" "${patchdata[1]} ${patchdata[2]}")
-        else
+        elif [[ $line =~ $gerrit_re ]]; then
             GERRIT_CHANGES+="$line "  
         fi  
     done < patches.txt
 
-	# Apply gerrit changes
+    # Apply gerrit changes
     if [[ ! -z ${GERRIT_CHANGES} && ! ${GERRIT_CHANGES} == " " ]]; then
         echo -e "${txtylw}Applying gerrit patches...${txtrst}"
         python $CUR_DIR/build/tools/repopick.py $GERRIT_CHANGES --ignore-missing --start-branch auto --abandon-first
