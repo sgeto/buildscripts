@@ -397,13 +397,6 @@ if [ -f $CUR_DIR/env.sh ]; then
     source $CUR_DIR/env.sh
 fi
 
-# fix module copy for archlinux
-mkdir -p ${ANDROID_PRODUCT_OUT}/system/lib
-mkdir -p ${ANDROID_PRODUCT_OUT}/system/usr
-cd ${ANDROID_PRODUCT_OUT}/system/usr
-ln -sf ../lib .
-cd -
-
 # Apply changes from patches.txt.
 # 	Gerrit: one change-id per line
 # 	Local: local vendor/cm 0001-disable-security.patch
