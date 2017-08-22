@@ -1,4 +1,4 @@
-CyanogenMod buildscripts
+Lineage buildscripts
 ========================
 
 Starting from zero:
@@ -6,10 +6,10 @@ Starting from zero:
     mkdir -p ~/android/system
     cd ~/android
     touch ~/android/build.sh
-    curl https://raw.github.com/codeworkx/buildscripts/cm-14.1/build.sh > ~/android/build.sh
+    curl https://raw.github.com/codeworkx/buildscripts/lineage-15.0/build.sh > ~/android/build.sh
     Run "./build.sh prepare" as root
 
-If you've already synced CM-Sources:
+If you've already synced Lineage-Sources:
 ----------
 create .repo/local_manifests/buildscripts.xml with following content:
 ```xml
@@ -25,13 +25,23 @@ $ repo sync
 ### Additional files
 env.sh - Get's included from build.sh, usefull for running additional commands
 
-patches.txt - Let's you auto-apply gerrit patches, one gerrit patch-id per line
+Example:
+    export USE_CCACHE=1
+    export LC_ALL=C
+
+patches.txt - Lets you auto-apply gerrit/local patches, one patch per line
+
+Example:
+    # gerrit change
+    12345
+    # local patch
+    local path/to/target patchfile.patch
 
 Commands
 --------
 
-    ./build.sh mako (full build)
-    ./build.sh mako kernel (bootimage only)
+    ./build.sh bullhead (full build)
+    ./build.sh bullhead kernel (bootimage only)
     ./build.sh clean (make clean)
     ./build.sh clobber (make clober, wipes entire out/ directory)
     ./build.sh prepare (prepares the build environment)
