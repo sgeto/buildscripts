@@ -332,10 +332,10 @@ echo -e "\r\n ${txtrst}"
 
 # Check for build target
 if [ -z "${CMD}" ]; then
-	echo -e "${txtred}No build target set."
-	echo -e "${txtred}Usage: ./build.sh mako (complete build)"
-	echo -e "${txtred}       ./build.sh mako kernel (bootimage only)"
-	echo -e "${txtred}       ./build.sh clean (make clean)"
+    echo -e "${txtred}No build target set."
+    echo -e "${txtred}Usage: ./build.sh mako (complete build)"
+    echo -e "${txtred}       ./build.sh mako kernel (bootimage only)"
+    echo -e "${txtred}       ./build.sh clean (make clean)"
     echo -e "${txtred}       ./build.sh clobber (make clober, wipes entire out/ directory)"
     echo -e "${txtred}       ./build.sh prepare (prepares the build environment)"
     echo -e "\r\n ${txtrst}"
@@ -347,14 +347,14 @@ START=$(date +%s)
 
 case "$EXTRACMD" in
     eng)
-		BUILD_TYPE=eng
-		;;
+        BUILD_TYPE=eng
+        ;;
     userdebug)
-		BUILD_TYPE=userdebug
-		;;
+        BUILD_TYPE=userdebug
+        ;;
     *)
-		BUILD_TYPE=eng
-		;;
+        BUILD_TYPE=eng
+        ;;
 esac
 
 # Device specific settings
@@ -404,14 +404,14 @@ if [ -f $CUR_DIR/env.sh ]; then
 fi
 
 # Apply changes from patches.txt.
-# 	Gerrit: one change-id per line
-# 	Local: local vendor/cm 0001-disable-security.patch
+#    Gerrit: one change-id per line
+#    Local: local vendor/cm 0001-disable-security.patch
 if [ -f $CUR_DIR/patches.txt ]; then
     declare -a LOCAL_CHANGES
 
     gerrit_re='^[0-9]+$'
 
-	# Read patch data
+    # Read patch data
     while read line; do
         if [[ $line == local* ]]; then
             IFS=' ' read -a patchdata <<< "$line"
@@ -421,10 +421,10 @@ if [ -f $CUR_DIR/patches.txt ]; then
         fi  
     done < patches.txt
 
-	# Apply gerrit changes
+    # Apply gerrit changes
     if [[ ! -z ${GERRIT_CHANGES} && ! ${GERRIT_CHANGES} == " " ]]; then
         echo -e "${txtylw}Applying gerrit patches...${txtrst}"
-        python $CUR_DIR/vendor/cm/build/tools/repopick.py $GERRIT_CHANGES --ignore-missing --start-branch auto --abandon-first
+        python $CUR_DIR/vendor/$ROM_NAME/build/tools/repopick.py $GERRIT_CHANGES --ignore-missing --start-branch auto --abandon-first
         echo -e "${txtgrn}Patches from gerrit applied!${txtrst}"
     fi
 
@@ -456,7 +456,7 @@ case "$EXTRACMD" in
 
         mka bootimage
         if [ ! -e ${ANDROID_PRODUCT_OUT}/obj/EXECUTABLES/updater_intermediates/updater ]; then
-        	mka updater
+            mka updater
         fi
         if [ ! -e ${ANDROID_HOST_OUT}/framework/signapk.jar ]; then
             mka signapk
