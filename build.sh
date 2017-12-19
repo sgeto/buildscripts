@@ -7,7 +7,7 @@ CUR_DIR=`dirname $0`
 DATE=$(date +%D)
 MACHINE_TYPE=`uname -m`
 ROM_NAME="lineage"
-ROM_VERSION=15.0
+ROM_VERSION=15.1
 
 # Common defines (Arch-dependent)
 case `uname -s` in
@@ -175,6 +175,7 @@ prepare_environment()
         echo "10) cm-14.0 (nougat)"
         echo "11) cm-14.1 (nougat)"
         echo "12) lineage-15.0 (oreo)"
+        echo "13) lineage-15.1 (oreo)"
         read -n1 branch
         echo -e "\r\n"
 
@@ -226,6 +227,10 @@ prepare_environment()
             "12")
                 # lineage-15.0
                 branch="lineage-15.0"
+                ;;
+            "13")
+                # lineage-15.1
+                branch="lineage-15.1"
                 ;;
             *)
                 # no branch
@@ -456,7 +461,7 @@ case "$EXTRACMD" in
 
         mka bootimage
         if [ ! -e ${ANDROID_PRODUCT_OUT}/obj/EXECUTABLES/updater_intermediates/updater ]; then
-        	mka updater
+            mka updater
         fi
         if [ ! -e ${ANDROID_HOST_OUT}/framework/signapk.jar ]; then
             mka signapk
