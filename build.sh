@@ -429,7 +429,7 @@ if [ -f $CUR_DIR/patches.txt ]; then
 	# Apply gerrit changes
     if [[ ! -z ${GERRIT_CHANGES} && ! ${GERRIT_CHANGES} == " " ]]; then
         echo -e "${txtylw}Applying gerrit patches...${txtrst}"
-        python $CUR_DIR/vendor/cm/build/tools/repopick.py $GERRIT_CHANGES --ignore-missing --start-branch auto --abandon-first
+        python $CUR_DIR/vendor/lineage/build/tools/repopick.py $GERRIT_CHANGES --ignore-missing --start-branch auto --abandon-first
         echo -e "${txtgrn}Patches from gerrit applied!${txtrst}"
     fi
 
