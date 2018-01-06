@@ -3,24 +3,16 @@ Lineage buildscripts
 
 Starting from zero:
 ---------
-    mkdir -p ~/android/system
-    cd ~/android
-    touch ~/android/build.sh
-    curl https://raw.github.com/codeworkx/buildscripts/lineage-15.1/build.sh > ~/android/build.sh
-    Run "./build.sh prepare" as root
+    mkdir -p ~/android/lineage
+    cd ~/android/lineage
+    repo init -u git://github.com/LineageOS/android.git -b lineage-15.1
+    curl https://raw.githubusercontent.com/codeworkx/buildscripts/lineage-15.1/my_manifest.xml > ~/android/lineage/.repo/local_manifests/my_manifest.xml
+    repo sync -j20
 
 If you've already synced Lineage-Sources:
 ----------
-create .repo/local_manifests/buildscripts.xml with following content:
-```xml
-    <?xml version="1.0" encoding="UTF-8"?>
-    <manifest>
-        <project name="codeworkx/buildscripts" path="buildscripts" remote="github">
-            <copyfile dest="build.sh" src="build.sh" />
-        </project>
-    </manifest>
-```
-$ repo sync
+    curl https://raw.githubusercontent.com/codeworkx/buildscripts/lineage-15.1/my_manifest.xml > /path/to/lineage/.repo/local_manifests/my_manifest.xml
+    repo sync -j20
 
 ### Additional files
 env.sh - Get's included from build.sh, usefull for running additional commands
@@ -29,21 +21,24 @@ Example:
     export USE_CCACHE=1
     export LC_ALL=C
 
-patches.txt - Lets you auto-apply gerrit/local patches, one patch per line
+patches.txt - Lets you auto-apply gerrit/local patches, one change/topic/patch per line
 
 Example:
     # gerrit change
     12345
+    # gerrit topic
+    topic oreo-bringup
     # local patch
     local path/to/target patchfile.patch
 
 Commands
 --------
 
-    ./build.sh bullhead (full build)
-    ./build.sh bullhead kernel (bootimage only)
+    ./build.sh bullhead (full build, eng)
+    ./build.sh bullhead userdebug (full build, userdebug)
+    ./build.sh bullhead boot (bootimage only)
+    ./build.sh bullhead recovery (recoveryimage only)
     ./build.sh clean (make clean)
-    ./build.sh clobber (make clober, wipes entire out/ directory)
-    ./build.sh prepare (prepares the build environment)
+    ./build.sh clobber (make clobber, wipes entire out/ directory)
 
 
