@@ -76,7 +76,14 @@ local_apply_patch()
 
         echo -e "${txtblu}Patch: ${2} ${txtrst}"
         echo -e "${txtblu}Target: ${1} ${txtrst}"
-        git apply --directory=${1} ${2}
+
+        pushd ${1}
+        # Create auto branch
+        repo start auto
+        # Apply patch
+        git am ${A_TOP}/${2}
+        popd
+
         if [[ ${PIPESTATUS[0]} != 0 ]]; then
             echo -e "${txtred}Applying local patch ${1} failed!${txtrst}"
             exit 1
