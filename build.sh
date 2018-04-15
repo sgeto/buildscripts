@@ -203,6 +203,11 @@ if [ -f $CUR_DIR/patches.txt ]; then
     echo -e "${txtgrn}...done${txtrst}"
 fi
 
+# Prebuild script
+if [ -f $CUR_DIR/prebuild.sh ]; then
+    source $CUR_DIR/prebuild.sh
+fi
+
 # Start the Build
 case "$EXTRACMD" in
     boot)
