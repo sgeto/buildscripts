@@ -6,7 +6,7 @@ A_TOP=${PWD}
 CUR_DIR=`dirname $0`
 DATE=$(date +%D)
 ROM_NAME="lineage"
-ROM_VERSION=15.1
+ROM_VERSION=16.0
 
 # Common defines (Arch-dependent)
 case `uname -s` in
