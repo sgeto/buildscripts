@@ -177,9 +177,11 @@ if [ -f $CUR_DIR/env.sh ]; then
 fi
 
 # Apply changes from patches.txt.
-#   Gerrit: one change-id per line
-#           topic oreo-bringup
-#   Local: local vendor/lineage 0001-disable-security.patch
+# Commands:
+#   123456                                              // Cherry pick specific change-id
+#   topic oreo-bringup                                  // Cherry pick all changes with specific topic
+#   local vendor/lineage 0001-disable-security.patch    // Apply local patch
+#   sync                                                // Do repo sync
 if [ -f $CUR_DIR/patches.txt ]; then
     echo -e "${txtylw}Applying patches from patches.txt...${txtrst}"
     repo abandon auto
@@ -197,6 +199,10 @@ if [ -f $CUR_DIR/patches.txt ]; then
             topic*)
                 IFS=' ' read -a patchdata <<< "$line"
                 gerrit_apply_topic ${patchdata[1]}
+                ;;
+            sync)
+                echo -e "${txtylw}Syncing...${txtrst}"
+                repo sync -j20
                 ;;
         esac
     done < patches.txt
