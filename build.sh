@@ -64,6 +64,32 @@ gerrit_apply_change()
     fi
 }
 
+github_checkout()
+{
+    if [[ ! -z ${1} && ! ${1} == " " && ! -z ${2} && ! ${2} == " " && ! -z ${3} && ! ${3} == " " ]]; then
+        echo -e "${txtylw}Doing github checkout on ${1} ${txtrst}"
+
+        echo -e "${txtblu}Repo: ${2} ${txtrst}"
+        echo -e "${txtblu}Ref: ${3} ${txtrst}"
+        echo -e "${txtblu}Target: ${1} ${txtrst}"
+
+        pushd ${1}
+        # Create auto branch
+        repo start auto
+        # Do checkout
+        git fetch https://github.com/${2} ${3} && git checkout FETCH_HEAD
+        popd
+
+        if [[ ${PIPESTATUS[0]} != 0 ]]; then
+            echo -e "${txtred}Checkout on ${1} failed!${txtrst}"
+            exit 1
+        fi
+
+    else
+        echo -e "${txtred}Invalid checkout: ${1} ${txtrst}"
+    fi
+}
+
 local_apply_patch()
 {
     if [[ ! -z ${1} && ! ${1} == " " && ! -z ${2} && ! ${2} == " " ]]; then
@@ -178,10 +204,12 @@ fi
 
 # Apply changes from patches.txt.
 # Commands:
-#   123456                                              // Cherry pick specific change-id
-#   topic oreo-bringup                                  // Cherry pick all changes with specific topic
-#   local vendor/lineage 0001-disable-security.patch    // Apply local patch
-#   sync                                                // Do repo sync
+#   123456                                                                                          // Cherry pick specific change-id
+#   checkout packages/apps/Settings LineageOS/android_packages_apps_Settings refs/changes/1/1/1     // Do a github checkout
+#   topic oreo-bringup                                                                              // Cherry pick all changes with specific topic
+#   local vendor/lineage 0001-disable-security.patch                                                // Apply local patch
+#   sync    
+#                                                                                        // Do repo sync
 if [ -f $CUR_DIR/patches.txt ]; then
     echo -e "${txtylw}Applying patches from patches.txt...${txtrst}"
     repo abandon auto
@@ -189,6 +217,10 @@ if [ -f $CUR_DIR/patches.txt ]; then
     # Read patch data
     while read line; do
         case $line in
+            checkout*)
+                IFS=' ' read -a patchdata <<< "$line"
+                github_checkout ${patchdata[1]} ${patchdata[2]} ${patchdata[3]}
+                ;;
             local*)
                 IFS=' ' read -a patchdata <<< "$line"
                 local_apply_patch ${patchdata[1]} ${patchdata[2]}
