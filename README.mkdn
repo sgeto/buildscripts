@@ -18,18 +18,30 @@ If you've already synced Lineage-Sources:
 env.sh - Get's included from build.sh, usefull for running additional commands
 
 Example:
+
     export USE_CCACHE=1
     export LC_ALL=C
 
-patches.txt - Lets you auto-apply gerrit/local patches, one change/topic/patch per line
+
+patches.txt - Lets you auto-apply gerrit/local patches, one change/topic/patch/checkout per line
 
 Example:
+
     # gerrit change
     12345
+    
     # gerrit topic
     topic oreo-bringup
+    
     # local patch
     local path/to/target patchfile.patch
+    
+    # checkout
+    checkout packages/apps/Settings LineageOS/android_packages_apps_Settings refs/changes/1/1/1
+    
+    # run repo sync
+    sync
+
 
 Commands
 --------
