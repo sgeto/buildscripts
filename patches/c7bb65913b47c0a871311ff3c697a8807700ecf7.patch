@@ -1,0 +1,57 @@
+From c7bb65913b47c0a871311ff3c697a8807700ecf7 Mon Sep 17 00:00:00 2001
+From: walter79 <gzwalter79@gmail.com>
+Date: Sun, 4 Mar 2018 17:01:09 +0100
+Subject: [PATCH] MtpDocumentsProvider: catch possible IllegalStateException
+
+thanks to mickybart
+---
+ patch/note-8-nougat-mtp-crash.patch | 40 +++++++++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
+ create mode 100644 patch/note-8-nougat-mtp-crash.patch
+
+diff --git a/patch/note-8-nougat-mtp-crash.patch b/patch/note-8-nougat-mtp-crash.patch
+new file mode 100644
+index 0000000..2c15ca5
+--- /dev/null
++++ b/patch/note-8-nougat-mtp-crash.patch
+@@ -0,0 +1,40 @@
++From 3e47fc0373eda8623fe8a5cd8e40c5960c0f545c Mon Sep 17 00:00:00 2001
++From: mickybart <mickybart@pygoscelis.org>
++Date: Sat, 19 Nov 2016 22:24:56 -0500
++Subject: [PATCH] MtpDocumentsProvider: catch possible IllegalStateException
++ (eg: fix DocumentUI / Mtp crash on first start)
++
++---
++ .../src/com/android/mtp/MtpDocumentsProvider.java                    | 5 +++--
++ 1 file changed, 3 insertions(+), 2 deletions(-)
++
++diff --git a/packages/MtpDocumentsProvider/src/com/android/mtp/MtpDocumentsProvider.java b/packages/MtpDocumentsProvider/src/com/android/mtp/MtpDocumentsProvider.java
++index f1e24b80fad..9f21ff0bbc0 100644
++--- a/packages/MtpDocumentsProvider/src/com/android/mtp/MtpDocumentsProvider.java
+++++ b/packages/MtpDocumentsProvider/src/com/android/mtp/MtpDocumentsProvider.java
++@@ -51,6 +51,7 @@
++ import java.io.FileDescriptor;
++ import java.io.FileNotFoundException;
++ import java.io.IOException;
+++import java.lang.Exception;
++ import java.util.HashMap;
++ import java.util.List;
++ import java.util.Map;
++@@ -134,7 +135,7 @@ public boolean onCreate() {
++         // TODO: Mount AppFuse on demands.
++         try {
++             mAppFuse.mount(getContext().getSystemService(StorageManager.class));
++-        } catch (IOException error) {
+++        } catch (Exception error) {
++             Log.e(TAG, "Failed to start app fuse.", error);
++             return false;
++         }
++@@ -165,7 +166,7 @@ boolean onCreateForTesting(
++         // TODO: Mount AppFuse on demands.
++         try {
++             mAppFuse.mount(storageManager);
++-        } catch (IOException e) {
+++        } catch (Exception e) {
++             Log.e(TAG, "Failed to start app fuse.", e);
++             return false;
++         }
